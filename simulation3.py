@@ -31,7 +31,7 @@ def equations_of_motion_with_drag(t, state):
         V_RF * t_dependence * ((y - r_0) / (x**2 + (y - r_0)**2)**1.5 +
                                (y + r_0) / (x**2 + (y + r_0)**2)**1.5)
     )
-    Fy += m * g  # Add gravitational force
+    # Fy += m * g  # Add gravitational force
 
     # Accelerations
     ax = Fx / m - (b / m) * vx
@@ -42,8 +42,8 @@ def equations_of_motion_with_drag(t, state):
 # Initial conditions
 initial_x = 1e-6    # Initial x position (m)
 initial_y = 2e-6    # Initial y position (m)
-initial_vx = 0      # Initial velocity in x (m/s)
-initial_vy = 0      # Initial velocity in y (m/s)
+initial_vx = -1e-6      # Initial velocity in x (m/s)
+initial_vy = -1e-6      # Initial velocity in y (m/s)
 initial_state = [initial_x, initial_vx, initial_y, initial_vy]
 
 # Time parameters
@@ -59,7 +59,7 @@ solution = solve_ivp(
     [t_start, t_end],
     initial_state,
     t_eval=time_eval,
-    method='RK45'
+    method='LSODA'
 )
 print("solved")
 
