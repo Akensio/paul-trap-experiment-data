@@ -19,11 +19,10 @@ fig, ax, arrow_colormap, pole_colormap, particle_trajectory, particle_marker = s
 
 # Create electrode lines
 electrode_lines = []
-for electrode in electrodes:
-    pos = electrode
+for electrode_position in electrode_positions:
     z_range = np.linspace(-0.1, 0.1, 100)
-    x_coords = np.full_like(z_range, pos[0])
-    y_coords = np.full_like(z_range, pos[1])
+    x_coords = np.full_like(z_range, electrode_position[0])
+    y_coords = np.full_like(z_range, electrode_position[1])
     (line,) = ax.plot(x_coords, y_coords, z_range, linewidth=3, color="gray")
     electrode_lines.append(line)
 
@@ -54,7 +53,7 @@ def update(frame):
 
     # Update particle dynamics
     particle_pos, particle_vel = update_particle_position(
-        particle_pos, particle_vel, electrodes, lambda_values
+        particle_pos, particle_vel, electrode_positions, lambda_values
     )
     particle_positions.append(particle_pos.copy())
 
@@ -78,7 +77,7 @@ def update(frame):
 
     # Calculate total electric field
     Ex_total, Ey_total, Ez_total = np.zeros_like(X), np.zeros_like(Y), np.zeros_like(Z)
-    for i, electrode in enumerate(electrodes):
+    for i, electrode in enumerate(electrode_positions):
         Ex, Ey, Ez = calculate_field_from_electrode(X, Y, Z, electrode, lambda_values[i])
         Ex_total += Ex
         Ey_total += Ey
