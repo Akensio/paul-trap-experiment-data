@@ -7,6 +7,7 @@ from matplotlib.animation import FuncAnimation
 from matplotlib.colors import Normalize
 from numpy.typing import NDArray
 from trap import Trap
+import matplotlib.animation as animation
 
 
 class PaulTrapVisualizer:
@@ -168,19 +169,16 @@ class PaulTrapVisualizer:
         self.quiver.set_UVC(Ex_norm, Ey_norm)
         self.quiver.set_array(colors.flatten())
 
-    def animate(self) -> None:
-        """Create and display the animation."""
-        self.current_frame = 0  # Add frame tracking
+    def animate(self, save_video: bool = False, filename: str = "paul_trap.mp4") -> None:
+        """Create and display the animation, optionally saving to video."""
+        self.current_frame = 0
 
         # Create quiver with initial colors
         colors = self.calculate_field_colors()
         norm = Normalize(vmin=-np.max(np.abs(colors)), vmax=np.max(np.abs(colors)))
 
         self.quiver = self.ax.quiver(
-            self.X,
-            self.Y,
-            self.Ex,
-            self.Ey,
+            self.X, self.Y, self.Ex, self.Ey,
             colors.flatten(),
             cmap=COLOR_CONFIG.colormap,
             norm=norm,
@@ -199,6 +197,19 @@ class PaulTrapVisualizer:
             blit=True,
             interval=PLOT_CONFIG.animation_interval,
         )
+
+        if save_video:
+            # Set up the writer
+            writer = animation.FFMpegWriter(
+                fps=30, 
+                metadata=dict(artist='Paul Trap Simulation'),
+                bitrate=2000
+            )
+            
+            # Save the animation
+            self.anim.save(filename, writer=writer)
+            print(f"Video saved as {filename}")
+        
         plt.show()
 
     def update_rod_colors(self, frame: int) -> None:
