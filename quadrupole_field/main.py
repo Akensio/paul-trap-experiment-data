@@ -8,9 +8,9 @@ def voltages_over_time(t: float) -> List[float]:
     # Oscillating voltages for rods
     return [
         10 * np.sin(2 * np.pi * t),
+        10 * np.sin(2 * np.pi * t),
         -10 * np.sin(2 * np.pi * t),
-        10 * np.cos(2 * np.pi * t),
-        -10 * np.cos(2 * np.pi * t),
+        -10 * np.sin(2 * np.pi * t),
     ]
 
 
