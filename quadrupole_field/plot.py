@@ -1,11 +1,12 @@
+from typing import Any, Tuple
+
 import matplotlib.pyplot as plt
 import numpy as np
+from config import COLOR_CONFIG, PLOT_CONFIG
 from matplotlib.animation import FuncAnimation
 from matplotlib.colors import Normalize
 from numpy.typing import NDArray
 from trap import Trap
-from typing import Tuple, Any
-from config import PLOT_CONFIG, COLOR_CONFIG
 
 
 class PaulTrapVisualizer:
@@ -24,12 +25,12 @@ class PaulTrapVisualizer:
         self.trap = trap
         self.dt = dt
         self.field_resolution = PLOT_CONFIG.field_resolution
-        
+
         # Setup the plot
         self.setup_plot()
         self.setup_field_grid()
         self.calculate_max_field()
-        
+
     def setup_plot(self) -> None:
         """Initialize the matplotlib figure and axes."""
         self.fig, self.ax = plt.subplots(figsize=PLOT_CONFIG.figure_size)
@@ -44,29 +45,28 @@ class PaulTrapVisualizer:
         # Plot the rods with initial colors
         rod_positions = np.array([rod.position for rod in self.trap.rods])
         self.rod_dots = self.ax.scatter(
-            rod_positions[:, 0], 
+            rod_positions[:, 0],
             rod_positions[:, 1],
             c=self.voltages_history[0],
             cmap=COLOR_CONFIG.colormap,
-            norm=Normalize(vmin=COLOR_CONFIG.voltage_range[0], 
-                         vmax=COLOR_CONFIG.voltage_range[1]),
+            norm=Normalize(
+                vmin=COLOR_CONFIG.voltage_range[0], vmax=COLOR_CONFIG.voltage_range[1]
+            ),
             s=PLOT_CONFIG.rod_dot_size,
-            zorder=PLOT_CONFIG.rod_zorder
+            zorder=PLOT_CONFIG.rod_zorder,
         )
 
         # Initialize particle and trajectory plots
         (self.particle_dot,) = self.ax.plot(
-            [], [], 
-            "o",
-            color=COLOR_CONFIG.particle_color,
-            label="Particle"
+            [], [], "o", color=COLOR_CONFIG.particle_color, label="Particle"
         )
         (self.trajectory_line,) = self.ax.plot(
-            [], [], 
+            [],
+            [],
             "-",
             color=COLOR_CONFIG.trajectory_color,
             lw=PLOT_CONFIG.trajectory_line_width,
-            label="Trajectory"
+            label="Trajectory",
         )
         self.ax.grid(color=COLOR_CONFIG.grid_color)
 
@@ -77,7 +77,7 @@ class PaulTrapVisualizer:
         self.X, self.Y = np.meshgrid(x, y)
         self.Ex = np.zeros_like(self.X)
         self.Ey = np.zeros_like(self.Y)
-        
+
     def calculate_max_field(self) -> None:
         """Calculate maximum field magnitude across all time steps."""
         self.max_magnitude = 0
@@ -128,7 +128,7 @@ class PaulTrapVisualizer:
         x_traj, y_traj = self.positions[:frame, 0], self.positions[:frame, 1]
         self.particle_dot.set_data([x_traj[-1]], [y_traj[-1]])
         self.trajectory_line.set_data(x_traj, y_traj)
-        
+
         self.trap.set_voltages(self.voltages_history[frame])
         self.update_field()
         self.update_rod_colors(frame)
@@ -141,7 +141,9 @@ class PaulTrapVisualizer:
             for j in range(len(self.Y)):
                 # Sum up contributions from all rods
                 potential = 0
-                for rod, voltage in zip(self.trap.rods, self.voltages_history[self.current_frame]):
+                for rod, voltage in zip(
+                    self.trap.rods, self.voltages_history[self.current_frame]
+                ):
                     dx = self.X[i, j] - rod.position[0]
                     dy = self.Y[i, j] - rod.position[1]
                     R = np.sqrt(dx**2 + dy**2) + 1e-9
@@ -157,11 +159,11 @@ class PaulTrapVisualizer:
                     self.X[i, j], self.Y[i, j]
                 )
         Ex_norm, Ey_norm = self.normalize_field(self.Ex, self.Ey)
-        
+
         # Calculate colors based on potential
         colors = self.calculate_field_colors()
         norm = Normalize(vmin=-np.max(np.abs(colors)), vmax=np.max(np.abs(colors)))
-        
+
         # Update quiver with colors
         self.quiver.set_UVC(Ex_norm, Ey_norm)
         self.quiver.set_array(colors.flatten())
@@ -169,23 +171,26 @@ class PaulTrapVisualizer:
     def animate(self) -> None:
         """Create and display the animation."""
         self.current_frame = 0  # Add frame tracking
-        
+
         # Create quiver with initial colors
         colors = self.calculate_field_colors()
         norm = Normalize(vmin=-np.max(np.abs(colors)), vmax=np.max(np.abs(colors)))
-        
+
         self.quiver = self.ax.quiver(
-            self.X, self.Y, self.Ex, self.Ey,
+            self.X,
+            self.Y,
+            self.Ex,
+            self.Ey,
             colors.flatten(),
             cmap=COLOR_CONFIG.colormap,
             norm=norm,
             alpha=PLOT_CONFIG.quiver_alpha,
-            scale=PLOT_CONFIG.quiver_scale
+            scale=PLOT_CONFIG.quiver_scale,
         )
-        
+
         # Add colorbar
-        plt.colorbar(self.quiver, label='Electric Potential')
-        
+        plt.colorbar(self.quiver, label="Electric Potential")
+
         self.anim = FuncAnimation(
             self.fig,
             self.update_frame,

@@ -1,10 +1,10 @@
 from typing import Callable, List, Tuple
 
 import numpy as np
+from config import SIMULATION_CONFIG
 from numpy.typing import NDArray
 from particle import Particle
 from trap import Trap
-from config import SIMULATION_CONFIG
 
 
 class Simulation:
