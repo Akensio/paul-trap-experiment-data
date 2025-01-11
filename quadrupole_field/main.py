@@ -47,6 +47,6 @@ if __name__ == "__main__":
         trap=simulation.trap,
         dt=SIMULATION_CONFIG.dt,
     )
-    
+
     # Save video and show animation
     visualizer.animate(save_video=True, filename="out/paul_trap_simulation.mp4")
