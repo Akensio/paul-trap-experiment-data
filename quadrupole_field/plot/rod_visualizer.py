@@ -4,8 +4,8 @@ import numpy as np
 from numpy.typing import NDArray
 from matplotlib.axes import Axes
 from matplotlib.colors import Normalize
-from ..trap import Trap
-from .plot_config import COLOR_CONFIG, PLOT_CONFIG
+from quadrupole_field.trap import Trap
+from quadrupole_field.plot.plot_config import COLOR_CONFIG, PLOT_CONFIG
 
 class RodVisualizer:
     def __init__(self, ax: Axes, trap: Trap) -> None:

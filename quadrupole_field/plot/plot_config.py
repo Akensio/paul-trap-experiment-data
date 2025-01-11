@@ -19,6 +19,9 @@ class PlotConfig:
     quiver_alpha: float = 0.6
     quiver_scale: int = 15
     animation_interval: int = 20
+    velocity_arrow_scale: float = 5.0
+    velocity_arrow_width: float = 0.005
+    velocity_arrow_size: float = 0.2
 
 @dataclass
 class ColorConfig:
@@ -26,8 +29,9 @@ class ColorConfig:
         default_factory=create_electric_colormap
     )
     voltage_range: tuple[float, float] = (-10, 10)
-    particle_color: str = "blue"
-    trajectory_color: str = "blue"
+    particle_color: str = "#1f77b4"
+    trajectory_color: str = "#1f77b4"
+    velocity_arrow_color: str = "#d62728"
     grid_color: str = "gray"
 
 # Create instances

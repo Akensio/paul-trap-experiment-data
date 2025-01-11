@@ -4,7 +4,7 @@ import numpy as np
 from numpy.typing import NDArray
 from matplotlib.axes import Axes
 from matplotlib.lines import Line2D
-from .plot_config import COLOR_CONFIG, PLOT_CONFIG
+from quadrupole_field.plot.plot_config import COLOR_CONFIG, PLOT_CONFIG
 
 class ParticleVisualizer:
     def __init__(self, ax: Axes) -> None:
@@ -16,7 +16,8 @@ class ParticleVisualizer:
         self.particle_dot, = self.ax.plot(
             [], [], "o",
             color=COLOR_CONFIG.particle_color,
-            label="Particle"
+            label="Particle",
+            markersize=8
         )
         self.trajectory_line, = self.ax.plot(
             [], [], "-",
@@ -26,9 +27,9 @@ class ParticleVisualizer:
         )
         self.velocity_arrow = self.ax.quiver(
             [], [], [], [],
-            color='red',
-            scale=5.0,
-            width=0.005,
+            color=COLOR_CONFIG.velocity_arrow_color,
+            scale=PLOT_CONFIG.velocity_arrow_scale,
+            width=PLOT_CONFIG.velocity_arrow_width,
             label='Velocity Vector'
         )
         self.velocity_text = self.ax.text(
@@ -58,6 +59,6 @@ class ParticleVisualizer:
         self.velocity_text.set_text(f'Speed: {velocity:.2f} m/s')
         
         if velocity > 0:
-            normalized_vel = current_vel / velocity * 0.2 * a
+            normalized_vel = current_vel / velocity * PLOT_CONFIG.velocity_arrow_size * a
             self.velocity_arrow.set_offsets([current_pos[0], current_pos[1]])
             self.velocity_arrow.set_UVC(normalized_vel[0], normalized_vel[1])
