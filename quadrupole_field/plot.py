@@ -23,7 +23,7 @@ class PaulTrapVisualizer:
         self.a = a
         self.trap = trap
         self.dt = dt
-        self.field_resolution = PLOT_CONFIG["field_resolution"]
+        self.field_resolution = PLOT_CONFIG.field_resolution
         
         # Setup the plot
         self.setup_plot()
@@ -32,8 +32,8 @@ class PaulTrapVisualizer:
         
     def setup_plot(self) -> None:
         """Initialize the matplotlib figure and axes."""
-        self.fig, self.ax = plt.subplots(figsize=PLOT_CONFIG["figure_size"])
-        limit = self.a * PLOT_CONFIG["plot_limits_factor"]
+        self.fig, self.ax = plt.subplots(figsize=PLOT_CONFIG.figure_size)
+        limit = self.a * PLOT_CONFIG.plot_limits_factor
         self.ax.set_xlim(-limit, limit)
         self.ax.set_ylim(-limit, limit)
         self.ax.set_xlabel("X")
@@ -47,28 +47,28 @@ class PaulTrapVisualizer:
             rod_positions[:, 0], 
             rod_positions[:, 1],
             c=self.voltages_history[0],
-            cmap=COLOR_CONFIG["colormap"],
-            norm=Normalize(vmin=COLOR_CONFIG["voltage_range"][0], 
-                         vmax=COLOR_CONFIG["voltage_range"][1]),
-            s=PLOT_CONFIG["rod_dot_size"],
-            zorder=PLOT_CONFIG["rod_zorder"]
+            cmap=COLOR_CONFIG.colormap,
+            norm=Normalize(vmin=COLOR_CONFIG.voltage_range[0], 
+                         vmax=COLOR_CONFIG.voltage_range[1]),
+            s=PLOT_CONFIG.rod_dot_size,
+            zorder=PLOT_CONFIG.rod_zorder
         )
 
         # Initialize particle and trajectory plots
         (self.particle_dot,) = self.ax.plot(
             [], [], 
             "o",
-            color=COLOR_CONFIG["particle_color"],
+            color=COLOR_CONFIG.particle_color,
             label="Particle"
         )
         (self.trajectory_line,) = self.ax.plot(
             [], [], 
             "-",
-            color=COLOR_CONFIG["trajectory_color"],
-            lw=PLOT_CONFIG["trajectory_line_width"],
+            color=COLOR_CONFIG.trajectory_color,
+            lw=PLOT_CONFIG.trajectory_line_width,
             label="Trajectory"
         )
-        self.ax.grid(color=COLOR_CONFIG["grid_color"])
+        self.ax.grid(color=COLOR_CONFIG.grid_color)
 
     def setup_field_grid(self) -> None:
         """Setup the grid for the electric field quiver plot."""
@@ -177,10 +177,10 @@ class PaulTrapVisualizer:
         self.quiver = self.ax.quiver(
             self.X, self.Y, self.Ex, self.Ey,
             colors.flatten(),
-            cmap=COLOR_CONFIG["colormap"],
+            cmap=COLOR_CONFIG.colormap,
             norm=norm,
-            alpha=PLOT_CONFIG["quiver_alpha"],
-            scale=PLOT_CONFIG["quiver_scale"]
+            alpha=PLOT_CONFIG.quiver_alpha,
+            scale=PLOT_CONFIG.quiver_scale
         )
         
         # Add colorbar
@@ -192,7 +192,7 @@ class PaulTrapVisualizer:
             frames=len(self.positions),
             init_func=self.init_animation,
             blit=True,
-            interval=PLOT_CONFIG["animation_interval"],
+            interval=PLOT_CONFIG.animation_interval,
         )
         plt.show()
 

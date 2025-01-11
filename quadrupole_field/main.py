@@ -38,12 +38,12 @@ if __name__ == "__main__":
         mass=PARTICLE_MASS,
         initial_position=INITIAL_POSITION,
         initial_velocity=INITIAL_VELOCITY,
-        dt=SIMULATION_CONFIG["dt"]
+        dt=SIMULATION_CONFIG.dt
     )
     
     positions, voltages_history = simulation.run(
         voltages_over_time, 
-        SIMULATION_CONFIG["total_time"]
+        SIMULATION_CONFIG.total_time
     )
 
     visualizer = PaulTrapVisualizer(
@@ -51,6 +51,6 @@ if __name__ == "__main__":
         voltages_history=voltages_history,
         a=ROD_DISTANCE,
         trap=simulation.trap,
-        dt=SIMULATION_CONFIG["dt"]
+        dt=SIMULATION_CONFIG.dt
     )
     visualizer.animate()

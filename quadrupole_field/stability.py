@@ -37,7 +37,7 @@ def suggest_diamond_orbit_parameters(
     rod_distance: float,
     particle_charge: float,
     particle_mass: float,
-    driving_freq: float = 5.0  # Back to 5 Hz for balanced motion
+    driving_freq: float
 ) -> dict:
     """
     Suggest parameters for a diamond-shaped orbit.
