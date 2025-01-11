@@ -4,6 +4,9 @@ import numpy as np
 from constants import epsilon_0
 
 def calculate_field_from_electrode(X, Y, Z, electrode, lambda_charge):
+    """
+    Calculates the electric field components due to a single infinite electrode.
+    """
     Ex, Ey, Ez = np.zeros_like(X), np.zeros_like(Y), np.zeros_like(Z)
     electrode_pos = np.array(electrode["position"])
     R_perp = np.sqrt((X - electrode_pos[0]) ** 2 + (Y - electrode_pos[1]) ** 2)
@@ -13,6 +16,9 @@ def calculate_field_from_electrode(X, Y, Z, electrode, lambda_charge):
     return Ex, Ey, Ez
 
 def calculate_field_at_point(pos, electrodes, lambda_values):
+    """
+    Calculates the net electric field at a specific point due to multiple electrodes.
+    """
     Ex, Ey, Ez = 0, 0, 0
     for i, electrode in enumerate(electrodes):
         electrode_pos = np.array(electrode["position"])
