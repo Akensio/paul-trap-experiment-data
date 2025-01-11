@@ -1,14 +1,13 @@
 import numpy as np
-
-from fields import ElectricField
+from trap import Trap
 from particle import Particle
 
-
 class Simulation:
-    def __init__(
-        self, rod_positions, a, charge, mass, initial_position, initial_velocity, dt
-    ):
-        self.field = ElectricField(rod_positions, a)
+    def __init__(self, a, charge, mass, initial_position, initial_velocity, dt):
+        """
+        Initialize the simulation with the trap and particle.
+        """
+        self.trap = Trap(a)
         self.particle = Particle(charge, mass, initial_position, initial_velocity)
         self.dt = dt
 
@@ -24,8 +23,10 @@ class Simulation:
         for t in range(time_steps):
             t_actual = t * self.dt
             voltages = voltages_over_time(t_actual)
-            electric_field = self.field.compute_field(
-                self.particle.position[0], self.particle.position[1], voltages
+            self.trap.set_voltages(voltages)
+            electric_field = self.trap.electric_field_at(
+                self.particle.position[0],
+                self.particle.position[1]
             )
             self.particle.update(electric_field, self.dt)
             positions.append(self.particle.position.copy())

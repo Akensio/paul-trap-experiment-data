@@ -1,6 +1,5 @@
 import numpy as np
 
-
 class Particle:
     def __init__(self, charge, mass, position, velocity):
         """
