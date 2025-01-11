@@ -1,93 +1,174 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.animation import FuncAnimation
+from matplotlib.colors import Normalize
 from numpy.typing import NDArray
 from trap import Trap
+from typing import Tuple, Any
 
 
-def animate_simulation(
-    positions: NDArray[np.float64],
-    voltages_history: NDArray[np.float64],
-    a: float,
-    trap: Trap,
-    dt: float,
-    field_resolution: int = 20,
-) -> None:
-    """
-    Animate the particle's trajectory over time in the Paul trap, with a quiver plot of the electric field.
-    :param positions: Array of particle positions over time.
-    :param voltages_history: Array of voltages for all rods over time.
-    :param a: Rod distance from the origin.
-    :param trap: The trap object containing the rods.
-    :param dt: Time step for the simulation.
-    :param field_resolution: Number of grid points along one axis for the quiver plot.
-    """
-    fig, ax = plt.subplots(figsize=(8, 8))
-    ax.set_xlim(-1.5 * a, 1.5 * a)
-    ax.set_ylim(-1.5 * a, 1.5 * a)
-    ax.set_xlabel("X")
-    ax.set_ylabel("Y")
-    ax.set_title("Particle Trajectory in Paul Trap (Animation with Field)")
-    ax.grid()
+class PaulTrapVisualizer:
+    def __init__(
+        self,
+        positions: NDArray[np.float64],
+        voltages_history: NDArray[np.float64],
+        a: float,
+        trap: Trap,
+        dt: float,
+        field_resolution: int = 20,
+    ) -> None:
+        """Initialize the visualizer with simulation data."""
+        self.positions = positions
+        self.voltages_history = voltages_history
+        self.a = a
+        self.trap = trap
+        self.dt = dt
+        self.field_resolution = field_resolution
+        
+        # Setup the plot
+        self.setup_plot()
+        self.setup_field_grid()
+        self.calculate_max_field()
+        
+    def setup_plot(self) -> None:
+        """Initialize the matplotlib figure and axes."""
+        self.fig, self.ax = plt.subplots(figsize=(8, 8))
+        self.ax.set_xlim(-1.5 * self.a, 1.5 * self.a)
+        self.ax.set_ylim(-1.5 * self.a, 1.5 * self.a)
+        self.ax.set_xlabel("X")
+        self.ax.set_ylabel("Y")
+        self.ax.set_title("Particle Trajectory in Paul Trap (Animation with Field)")
+        self.ax.grid()
 
-    # Plot the rods
-    ax.plot([a, -a, 0, 0], [0, 0, a, -a], "ro", label="Rods")
-    ax.legend()
+        # Plot the rods
+        self.ax.plot([self.a, -self.a, 0, 0], [0, 0, self.a, -self.a], "ro", label="Rods")
+        self.ax.legend()
 
-    # Particle's current position
-    (particle_dot,) = ax.plot([], [], "bo", label="Particle")
-    (trajectory_line,) = ax.plot([], [], "b-", lw=1, label="Trajectory")
+        # Initialize particle and trajectory plots
+        (self.particle_dot,) = self.ax.plot([], [], "bo", label="Particle")
+        (self.trajectory_line,) = self.ax.plot([], [], "b-", lw=1, label="Trajectory")
 
-    # Set up the quiver grid
-    x = np.linspace(-1.5 * a, 1.5 * a, field_resolution)
-    y = np.linspace(-1.5 * a, 1.5 * a, field_resolution)
-    X, Y = np.meshgrid(x, y)
-    Ex = np.zeros_like(X)
-    Ey = np.zeros_like(Y)
-    quiver = ax.quiver(X, Y, Ex, Ey, color="gray", alpha=0.6)
+    def setup_field_grid(self) -> None:
+        """Setup the grid for the electric field quiver plot."""
+        x = np.linspace(-1.5 * self.a, 1.5 * self.a, self.field_resolution)
+        y = np.linspace(-1.5 * self.a, 1.5 * self.a, self.field_resolution)
+        self.X, self.Y = np.meshgrid(x, y)
+        self.Ex = np.zeros_like(self.X)
+        self.Ey = np.zeros_like(self.Y)
+        
+    def calculate_max_field(self) -> None:
+        """Calculate maximum field magnitude across all time steps."""
+        self.max_magnitude = 0
+        for voltages in self.voltages_history:
+            self.trap.set_voltages(voltages)
+            for i in range(len(self.X)):
+                for j in range(len(self.Y)):
+                    self.Ex[i, j], self.Ey[i, j] = self.trap.electric_field_at(
+                        self.X[i, j], self.Y[i, j]
+                    )
+            magnitudes = np.sqrt(self.Ex**2 + self.Ey**2)
+            self.max_magnitude = max(
+                self.max_magnitude, np.max(magnitudes[np.isfinite(magnitudes)])
+            )
 
-    # Initialize the animation
-    def init():
-        particle_dot.set_data([], [])
-        trajectory_line.set_data([], [])
-        quiver.set_UVC(Ex, Ey)  # Initialize quiver with zero vectors
-        return particle_dot, trajectory_line, quiver
+    def normalize_field(
+        self, Ex: NDArray[np.float64], Ey: NDArray[np.float64]
+    ) -> Tuple[NDArray[np.float64], NDArray[np.float64]]:
+        """Normalize the electric field vectors."""
+        if self.max_magnitude > 0:
+            Ex = Ex / self.max_magnitude
+            Ey = Ey / self.max_magnitude
+        return Ex, Ey
 
-    # Update function for each frame
-    def update(frame):
-        # Handle initial frame
+    def init_animation(self) -> tuple[Any, ...]:
+        """Initialize the animation."""
+        self.particle_dot.set_data([], [])
+        self.trajectory_line.set_data([], [])
+        self.quiver.set_UVC(self.Ex, self.Ey)
+        return self.particle_dot, self.trajectory_line, self.quiver
+
+    def update_frame(self, frame: int) -> tuple[Any, ...]:
+        """Update function for each animation frame."""
         if frame == 0:
-            particle_dot.set_data(
-                [positions[0, 0]], [positions[0, 1]]
-            )  # Set initial position
-            trajectory_line.set_data([], [])  # No trajectory at frame 0
-            for i in range(len(X)):
-                for j in range(len(Y)):
-                    Ex[i, j], Ey[i, j] = trap.electric_field_at(X[i, j], Y[i, j])
-            quiver.set_UVC(Ex, Ey)  # Update quiver vectors
-            return particle_dot, trajectory_line, quiver
+            return self.handle_first_frame()
+        return self.handle_normal_frame(frame)
 
-        # Particle trajectory
-        x_traj, y_traj = positions[:frame, 0], positions[:frame, 1]
-        particle_dot.set_data([x_traj[-1]], [y_traj[-1]])  # Update particle position
-        trajectory_line.set_data(x_traj, y_traj)  # Update trajectory
+    def handle_first_frame(self) -> tuple[Any, ...]:
+        """Handle the first frame of the animation."""
+        self.particle_dot.set_data([self.positions[0, 0]], [self.positions[0, 1]])
+        self.trajectory_line.set_data([], [])
+        self.update_field()
+        return self.particle_dot, self.trajectory_line, self.quiver
 
-        # Update rod voltages for this frame
-        voltages = voltages_history[frame]
-        trap.set_voltages(voltages)
+    def handle_normal_frame(self, frame: int) -> tuple[Any, ...]:
+        """Handle a normal frame of the animation."""
+        self.current_frame = frame  # Update current frame
+        x_traj, y_traj = self.positions[:frame, 0], self.positions[:frame, 1]
+        self.particle_dot.set_data([x_traj[-1]], [y_traj[-1]])
+        self.trajectory_line.set_data(x_traj, y_traj)
+        
+        self.trap.set_voltages(self.voltages_history[frame])
+        self.update_field()
+        return self.particle_dot, self.trajectory_line, self.quiver
 
-        # Update electric field vectors at grid points
-        for i in range(len(X)):
-            for j in range(len(Y)):
-                Ex[i, j], Ey[i, j] = trap.electric_field_at(X[i, j], Y[i, j])
-        quiver.set_UVC(Ex, Ey)  # Update quiver vectors
+    def calculate_field_colors(self) -> NDArray[np.float64]:
+        """Calculate colors based on the electric potential."""
+        colors = np.zeros_like(self.Ex)
+        for i in range(len(self.X)):
+            for j in range(len(self.Y)):
+                # Sum up contributions from all rods
+                potential = 0
+                for rod, voltage in zip(self.trap.rods, self.voltages_history[self.current_frame]):
+                    dx = self.X[i, j] - rod.position[0]
+                    dy = self.Y[i, j] - rod.position[1]
+                    R = np.sqrt(dx**2 + dy**2) + 1e-9
+                    potential += voltage / R
+                colors[i, j] = potential
+        return colors
 
-        return particle_dot, trajectory_line, quiver
+    def update_field(self) -> None:
+        """Update and normalize the electric field."""
+        for i in range(len(self.X)):
+            for j in range(len(self.Y)):
+                self.Ex[i, j], self.Ey[i, j] = self.trap.electric_field_at(
+                    self.X[i, j], self.Y[i, j]
+                )
+        Ex_norm, Ey_norm = self.normalize_field(self.Ex, self.Ey)
+        
+        # Calculate colors based on potential
+        colors = self.calculate_field_colors()
+        norm = Normalize(vmin=-np.max(np.abs(colors)), vmax=np.max(np.abs(colors)))
+        
+        # Update quiver with colors
+        self.quiver.set_UVC(Ex_norm, Ey_norm)
+        self.quiver.set_array(colors.flatten())
 
-    # Create the animation
-    anim = FuncAnimation(
-        fig, update, frames=len(positions), init_func=init, blit=True, interval=20
-    )
-
-    # Show the animation
-    plt.show()
+    def animate(self) -> None:
+        """Create and display the animation."""
+        self.current_frame = 0  # Add frame tracking
+        
+        # Create quiver with initial colors
+        colors = self.calculate_field_colors()
+        norm = Normalize(vmin=-np.max(np.abs(colors)), vmax=np.max(np.abs(colors)))
+        
+        self.quiver = self.ax.quiver(
+            self.X, self.Y, self.Ex, self.Ey,
+            colors.flatten(),
+            cmap='RdBu_r',  # Red-White-Blue colormap (reversed)
+            norm=norm,
+            alpha=0.6,
+            scale=15
+        )
+        
+        # Add colorbar
+        plt.colorbar(self.quiver, label='Electric Potential')
+        
+        self.anim = FuncAnimation(
+            self.fig,
+            self.update_frame,
+            frames=len(self.positions),
+            init_func=self.init_animation,
+            blit=True,
+            interval=20,
+        )
+        plt.show()

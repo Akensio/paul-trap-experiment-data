@@ -1,8 +1,8 @@
 from typing import List, Tuple
 
 import numpy as np
-from plot import animate_simulation
 from simulation import Simulation
+from plot import PaulTrapVisualizer
 
 
 def voltages_over_time(t: float) -> List[float]:
@@ -27,5 +27,6 @@ if __name__ == "__main__":
     simulation = Simulation(a, charge, mass, initial_position, initial_velocity, dt)
     positions, voltages_history = simulation.run(voltages_over_time, total_time)
 
-    # Pass positions and voltages to the animation
-    animate_simulation(positions, voltages_history, a, simulation.trap, dt)
+    # Create visualizer and run animation
+    visualizer = PaulTrapVisualizer(positions, voltages_history, a, simulation.trap, dt)
+    visualizer.animate()
