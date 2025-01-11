@@ -6,33 +6,31 @@ from constants import DRIVING_FREQUENCY, PARTICLE_CHARGE, PARTICLE_MASS, ROD_DIS
 from initialize import get_initial_parameters
 from plot import PaulTrapVisualizer
 from simulation import Simulation
+from orbit_parameters import OrbitParameters
 
 # Get initial parameters with the new diamond orbit calculations
-params = get_initial_parameters()
-VOLTAGE_AMPLITUDE = params["voltage_amplitude"]
-INITIAL_POSITION = params["initial_position"]
-INITIAL_VELOCITY = params["initial_velocity"]
+params: OrbitParameters = get_initial_parameters()
 
 
 def voltages_over_time(t: float) -> List[float]:
     """Calculate oscillating voltages for rods at time t."""
-    voltage = VOLTAGE_AMPLITUDE * np.sin(2 * np.pi * DRIVING_FREQUENCY * t)
+    voltage = params.voltage_amplitude * np.sin(2 * np.pi * params.driving_frequency * t)
     return [voltage, voltage, -voltage, -voltage]
 
 
 if __name__ == "__main__":
     # Print initial conditions for debugging
     print(f"Initial conditions:")
-    print(f"Voltage amplitude: {VOLTAGE_AMPLITUDE:.2f} V")
-    print(f"Initial position: {INITIAL_POSITION}")
-    print(f"Initial velocity: {INITIAL_VELOCITY}")
+    print(f"Voltage amplitude: {params.voltage_amplitude:.2f} V")
+    print(f"Initial position: {params.initial_position}")
+    print(f"Initial velocity: {params.initial_velocity}")
 
     simulation = Simulation(
         a=ROD_DISTANCE,
         charge=PARTICLE_CHARGE,
         mass=PARTICLE_MASS,
-        initial_position=INITIAL_POSITION,
-        initial_velocity=INITIAL_VELOCITY,
+        initial_position=params.initial_position,
+        initial_velocity=params.initial_velocity,
         dt=SIMULATION_CONFIG.dt,
     )
 
@@ -49,4 +47,4 @@ if __name__ == "__main__":
     )
 
     # Save video and show animation
-    visualizer.animate(save_video=True, filename="out/paul_trap_simulation.mp4")
+    visualizer.animate(save_video=False, filename="out/paul_trap_simulation.mp4")

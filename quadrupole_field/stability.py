@@ -3,6 +3,7 @@
 from typing import Tuple
 
 import numpy as np
+from orbit_parameters import OrbitParameters
 
 
 def calculate_secular_frequency(q: float, driving_freq: float) -> float:
@@ -43,14 +44,13 @@ def suggest_diamond_orbit_parameters(
     particle_charge: float,
     particle_mass: float,
     driving_freq: float,
-) -> dict:
+) -> OrbitParameters:
     """
     Suggest parameters for a diamond-shaped orbit.
-    Returns a dictionary of recommended parameters.
+    Returns an OrbitParameters object with recommended values.
     """
     # Keep the same q for stability
     target_q = 0.3
-
     omega = 2 * np.pi * driving_freq
 
     # Calculate required voltage for stable operation
@@ -72,14 +72,14 @@ def suggest_diamond_orbit_parameters(
     v0 = 2 * np.pi * secular_freq * r0 * 0.8  # Increased factor for more momentum
     initial_velocity = (-v0 * np.sin(angle), v0 * np.cos(angle))
 
-    return {
-        "voltage_amplitude": voltage,
-        "driving_frequency": driving_freq,
-        "initial_position": initial_position,
-        "initial_velocity": initial_velocity,
-        "stability_q": target_q,
-        "secular_frequency": secular_freq,
-    }
+    return OrbitParameters(
+        voltage_amplitude=voltage,
+        driving_frequency=driving_freq,
+        initial_position=initial_position,
+        initial_velocity=initial_velocity,
+        stability_q=target_q,
+        secular_frequency=secular_freq,
+    )
 
 
 if __name__ == "__main__":
