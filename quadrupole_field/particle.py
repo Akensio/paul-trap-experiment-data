@@ -1,7 +1,16 @@
 import numpy as np
+from typing import Tuple
+from numpy.typing import NDArray
+
 
 class Particle:
-    def __init__(self, charge, mass, position, velocity):
+    def __init__(
+        self,
+        charge: float,
+        mass: float,
+        position: Tuple[float, float],
+        velocity: Tuple[float, float],
+    ) -> None:
         """
         Initialize the particle with its properties.
         :param charge: Charge of the particle.
@@ -9,12 +18,12 @@ class Particle:
         :param position: Initial position as a tuple (x, y).
         :param velocity: Initial velocity as a tuple (vx, vy).
         """
-        self.q = charge
-        self.m = mass
-        self.position = np.array(position, dtype=float)
-        self.velocity = np.array(velocity, dtype=float)
+        self.q: float = charge
+        self.m: float = mass
+        self.position: NDArray[np.float64] = np.array(position, dtype=float)
+        self.velocity: NDArray[np.float64] = np.array(velocity, dtype=float)
 
-    def update(self, electric_field, dt):
+    def update(self, electric_field: Tuple[float, float], dt: float) -> None:
         """
         Update the particle's position and velocity.
         :param electric_field: Electric field vector (Ex, Ey).
