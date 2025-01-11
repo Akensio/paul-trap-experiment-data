@@ -13,7 +13,7 @@ from initialize import get_initial_parameters
 from simulation import Simulation
 from plot import PaulTrapVisualizer
 
-# Get initial parameters
+# Get initial parameters with the new diamond orbit calculations
 params = get_initial_parameters()
 VOLTAGE_AMPLITUDE = params["voltage_amplitude"]
 INITIAL_POSITION = params["initial_position"]
@@ -26,6 +26,12 @@ def voltages_over_time(t: float) -> List[float]:
 
 
 if __name__ == "__main__":
+    # Print initial conditions for debugging
+    print(f"Initial conditions:")
+    print(f"Voltage amplitude: {VOLTAGE_AMPLITUDE:.2f} V")
+    print(f"Initial position: {INITIAL_POSITION}")
+    print(f"Initial velocity: {INITIAL_VELOCITY}")
+    
     simulation = Simulation(
         a=ROD_DISTANCE,
         charge=PARTICLE_CHARGE,

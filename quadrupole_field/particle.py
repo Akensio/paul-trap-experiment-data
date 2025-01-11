@@ -14,10 +14,6 @@ class Particle:
     ) -> None:
         """
         Initialize the particle with its properties.
-        :param charge: Charge of the particle.
-        :param mass: Mass of the particle.
-        :param position: Initial position as a tuple (x, y).
-        :param velocity: Initial velocity as a tuple (vx, vy).
         """
         self.q: float = charge
         self.m: float = mass
@@ -26,11 +22,13 @@ class Particle:
 
     def update(self, electric_field: Tuple[float, float], dt: float) -> None:
         """
-        Update the particle's position and velocity.
-        :param electric_field: Electric field vector (Ex, Ey).
-        :param dt: Time step.
+        Update the particle's position and velocity using smaller timesteps
+        for better numerical stability.
         """
         Ex, Ey = electric_field
-        acceleration = self.q * np.array([Ex, Ey]) / self.m
-        self.velocity += acceleration * dt
-        self.position += self.velocity * dt
+        # Split the timestep into 4 smaller steps for better accuracy
+        dt_small = dt / 4
+        for _ in range(4):
+            acceleration = self.q * np.array([Ex, Ey]) / self.m
+            self.velocity += acceleration * dt_small
+            self.position += self.velocity * dt_small

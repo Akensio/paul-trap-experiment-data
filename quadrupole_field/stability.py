@@ -37,14 +37,14 @@ def suggest_diamond_orbit_parameters(
     rod_distance: float,
     particle_charge: float,
     particle_mass: float,
-    driving_freq: float = 2.0  # Increased frequency for better stability
+    driving_freq: float = 5.0  # Back to 5 Hz for balanced motion
 ) -> dict:
     """
     Suggest parameters for a diamond-shaped orbit.
     Returns a dictionary of recommended parameters.
     """
-    # Target q ≈ 0.4 for stable diamond motion
-    target_q = 0.4
+    # Keep the same q for stability
+    target_q = 0.3
     
     omega = 2 * np.pi * driving_freq
     
@@ -54,16 +54,15 @@ def suggest_diamond_orbit_parameters(
     # Calculate secular frequency
     secular_freq = calculate_secular_frequency(target_q, driving_freq)
     
-    # For diamond motion, we want to start at 45 degrees with appropriate velocity
-    r0 = rod_distance * 0.2  # 20% of rod distance for initial amplitude
+    # Keep small initial displacement
+    r0 = rod_distance * 0.08  # 8% of rod distance
     angle = np.pi/4  # 45 degrees
     
     # Initial position at 45 degrees
     initial_position = (r0 * np.cos(angle), r0 * np.sin(angle))
     
-    # Initial velocity perpendicular to position for circular-like motion
-    # The magnitude affects the shape of the orbit
-    v0 = np.sqrt(particle_charge * voltage / (particle_mass * rod_distance))
+    # Adjust velocity to match secular frequency
+    v0 = 2 * np.pi * secular_freq * r0 * 0.8  # Increased factor for more momentum
     initial_velocity = (-v0 * np.sin(angle), v0 * np.cos(angle))
     
     return {

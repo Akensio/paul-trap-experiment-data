@@ -3,8 +3,8 @@ from typing import Dict, Any
 
 # Simulation settings
 SIMULATION_CONFIG: Dict[str, Any] = {
-    "dt": 0.01,                    # Time step (seconds)
-    "total_time": 10.0,            # Total simulation time (seconds)
+    "dt": 0.001,                   # Smaller timestep for smoother simulation
+    "total_time": 5.0,             # Shorter time to focus on stable pattern
 }
 
 # Visualization settings

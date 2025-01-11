@@ -7,7 +7,7 @@ PROTON_MASS: float = 1.67262192369e-27     # kg
 
 # Trap parameters
 ROD_DISTANCE: float = 1.0                   # meters
-DRIVING_FREQUENCY: float = 1.0              # Hz
+DRIVING_FREQUENCY: float = 5.0              # Hz (balanced for good stability)
 
 # Particle parameters
 PARTICLE_CHARGE: float = 1.0                # Coulomb
