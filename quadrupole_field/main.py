@@ -1,12 +1,17 @@
 from typing import List
 
 import numpy as np
-from config import SIMULATION_CONFIG
-from constants import DRIVING_FREQUENCY, PARTICLE_CHARGE, PARTICLE_MASS, ROD_DISTANCE
-from initialize import get_initial_parameters
-from plot import PaulTrapVisualizer
-from simulation import Simulation
-from orbit_parameters import OrbitParameters
+from quadrupole_field.config import SIMULATION_CONFIG
+from quadrupole_field.constants import (
+    DRIVING_FREQUENCY,
+    PARTICLE_CHARGE,
+    PARTICLE_MASS,
+    ROD_DISTANCE,
+)
+from quadrupole_field.initialize import get_initial_parameters
+from quadrupole_field.plot import PaulTrapVisualizer
+from quadrupole_field.simulation import Simulation
+from quadrupole_field.orbit_parameters import OrbitParameters
 
 # Get initial parameters with the new diamond orbit calculations
 params: OrbitParameters = get_initial_parameters()

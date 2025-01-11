@@ -4,8 +4,8 @@ import numpy as np
 from numpy.typing import NDArray
 from matplotlib.axes import Axes
 from matplotlib.quiver import Quiver
-from ..trap import Trap
-from .plot_config import PLOT_CONFIG
+from quadrupole_field.trap import Trap
+from quadrupole_field.plot.plot_config import PLOT_CONFIG
 
 class FieldVisualizer:
     def __init__(self, ax: Axes, trap: Trap, a: float) -> None:

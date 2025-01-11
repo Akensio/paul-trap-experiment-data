@@ -1,10 +1,10 @@
 from typing import Callable, List, Tuple
 
 import numpy as np
-from config import SIMULATION_CONFIG
+from quadrupole_field.config import SIMULATION_CONFIG
 from numpy.typing import NDArray
-from particle import Particle
-from trap import Trap
+from quadrupole_field.particle import Particle
+from quadrupole_field.trap import Trap
 
 
 class Simulation:

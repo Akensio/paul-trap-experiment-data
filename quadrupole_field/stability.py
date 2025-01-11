@@ -3,7 +3,7 @@
 from typing import Tuple
 
 import numpy as np
-from orbit_parameters import OrbitParameters
+from quadrupole_field.orbit_parameters import OrbitParameters
 
 
 def calculate_secular_frequency(q: float, driving_freq: float) -> float:
@@ -50,7 +50,7 @@ def suggest_diamond_orbit_parameters(
     Returns an OrbitParameters object with recommended values.
     """
     # Keep the same q for stability
-    target_q = 0.1  # Smaller q ensures stability within Mathieu's stability region
+    target_q = 0.3  # Smaller q ensures stability within Mathieu's stability region
     omega = 2 * np.pi * driving_freq
 
     # Calculate required voltage for stable operation

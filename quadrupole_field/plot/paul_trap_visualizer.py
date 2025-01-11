@@ -4,11 +4,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 from numpy.typing import NDArray
 from matplotlib.animation import FuncAnimation
-from ..trap import Trap
-from .field_visualizer import FieldVisualizer
-from .particle_visualizer import ParticleVisualizer
-from .rod_visualizer import RodVisualizer
-from .plot_config import PLOT_CONFIG
+from quadrupole_field.trap import Trap
+from quadrupole_field.plot.field_visualizer import FieldVisualizer
+from quadrupole_field.plot.particle_visualizer import ParticleVisualizer
+from quadrupole_field.plot.rod_visualizer import RodVisualizer
+from quadrupole_field.plot.plot_config import PLOT_CONFIG, COLOR_CONFIG
 
 class PaulTrapVisualizer:
     def __init__(

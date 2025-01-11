@@ -1,8 +1,13 @@
 """Initialize simulation parameters."""
 
-from constants import DRIVING_FREQUENCY, PARTICLE_CHARGE, PARTICLE_MASS, ROD_DISTANCE
-from stability import suggest_diamond_orbit_parameters
-from orbit_parameters import OrbitParameters
+from quadrupole_field.constants import (
+    DRIVING_FREQUENCY,
+    PARTICLE_CHARGE,
+    PARTICLE_MASS,
+    ROD_DISTANCE,
+)
+from quadrupole_field.stability import suggest_diamond_orbit_parameters
+from quadrupole_field.orbit_parameters import OrbitParameters
 
 def get_initial_parameters() -> OrbitParameters:
     """Get the initial parameters for the simulation."""
