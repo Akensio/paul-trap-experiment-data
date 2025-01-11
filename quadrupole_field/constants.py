@@ -19,10 +19,10 @@ y = np.linspace(-0.1, 0.1, 10)
 z = np.linspace(-0.1, 0.1, 9)
 X, Y, Z = np.meshgrid(x, y, z)
 
-# Electrode positions
-electrodes = [
-    {"position": [-a, 0, 0]},
-    {"position": [a, 0, 0]},
-    {"position": [0, -a, 0]},
-    {"position": [0, a, 0]},
-]
+# Electrode positions. Ignore the z axis, redundant here..
+electrodes = np.array([
+    [-a, 0, 0],   # Electrode at (-a, 0)
+    [a, 0, 0],    # Electrode at (+a, 0)
+    [0, -a, 0],   # Electrode at (0, -a)
+    [0, a, 0],    # Electrode at (0, +a)
+])

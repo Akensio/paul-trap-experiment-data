@@ -10,8 +10,8 @@ from particle_dynamics import update_particle_position
 from visualization import setup_visualization, add_colorbars, update_quiver
 
 # Initialize particle
-particle_pos = np.array([0.05, 0, 0])
-particle_vel = np.array([0, 0.01, 0])
+particle_pos = np.array([0.001, 0, 0])
+particle_vel = np.array([0, 0.001, 0])
 particle_positions = [particle_pos.copy()]
 
 # Set up visualization
@@ -20,7 +20,7 @@ fig, ax, arrow_colormap, pole_colormap, particle_trajectory, particle_marker = s
 # Create electrode lines
 electrode_lines = []
 for electrode in electrodes:
-    pos = electrode["position"]
+    pos = electrode
     z_range = np.linspace(-0.1, 0.1, 100)
     x_coords = np.full_like(z_range, pos[0])
     y_coords = np.full_like(z_range, pos[1])
@@ -51,9 +51,6 @@ def update(frame):
         -lambda_amplitude * np.sin(omega * t),
         -lambda_amplitude * np.sin(omega * t),
     ]
-    print(f"t: {t}")
-    print(f"omega * t {omega * t}")
-    print(f"lambda values: {lambda_values}")
 
     # Update particle dynamics
     particle_pos, particle_vel = update_particle_position(
@@ -91,5 +88,5 @@ def update(frame):
     quiver = update_quiver(ax, X, Y, Z, Ex_total, Ey_total, Ez_total, field_norm, arrow_colormap, quiver)
     ax.set_title(f"Electric Field of Quadrupole (t = {t:.2f} s)")
 
-ani = FuncAnimation(fig, update, frames=3000, interval=50)
+ani = FuncAnimation(fig, update, frames=20000, interval=50)
 plt.show()
