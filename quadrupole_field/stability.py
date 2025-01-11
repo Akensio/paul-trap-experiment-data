@@ -9,10 +9,10 @@ from orbit_parameters import OrbitParameters
 def calculate_secular_frequency(q: float, driving_freq: float) -> float:
     """
     Calculate the secular frequency of the trap.
-    For small q, Ω ≈ (q/√8)ω where ω is the driving frequency
+    For small q we get Ω ≈ (q/√8)ω where ω is the driving frequency
     """
-    omega = 2 * np.pi * driving_freq
-    return (q / np.sqrt(8)) * omega
+
+    return q * driving_freq / (2 * np.sqrt(2))
 
 
 def calculate_stability_parameters(
@@ -46,11 +46,11 @@ def suggest_diamond_orbit_parameters(
     driving_freq: float,
 ) -> OrbitParameters:
     """
-    Suggest parameters for a diamond-shaped orbit.
+    Suggest parameters for a diamond-shaped orbit in a quadrupole Paul trap.
     Returns an OrbitParameters object with recommended values.
     """
     # Keep the same q for stability
-    target_q = 0.3
+    target_q = 0.1  # Smaller q ensures stability within Mathieu's stability region
     omega = 2 * np.pi * driving_freq
 
     # Calculate required voltage for stable operation
@@ -58,7 +58,6 @@ def suggest_diamond_orbit_parameters(
         4 * particle_charge
     )
 
-    # Calculate secular frequency
     secular_freq = calculate_secular_frequency(target_q, driving_freq)
 
     # Keep small initial displacement
@@ -69,7 +68,7 @@ def suggest_diamond_orbit_parameters(
     initial_position = (r0 * np.cos(angle), r0 * np.sin(angle))
 
     # Adjust velocity to match secular frequency
-    v0 = 2 * np.pi * secular_freq * r0 * 0.8  # Increased factor for more momentum
+    v0 = 2 * np.pi * secular_freq * r0
     initial_velocity = (-v0 * np.sin(angle), v0 * np.cos(angle))
 
     return OrbitParameters(
