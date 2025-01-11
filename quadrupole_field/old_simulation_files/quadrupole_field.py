@@ -17,8 +17,8 @@ m = 1e-6  # Mass of the particle (kg)
 dt = 1e-4  # Time step for numerical integration (s)
 
 # Initial particle position and velocity
-particle_pos = np.array([0.05, 0, 0])  # Initial position (m)
-particle_vel = np.array([0, 0.01, 0])  # Initial velocity (m/s)
+particle_pos = np.array([0.05, 0, 0])  # Example initial position
+particle_vel = np.array([0, 0.01, 0])  # Example initial velocity
 
 # Define grid for field calculation
 x = np.linspace(-0.1, 0.1, 10)
@@ -69,7 +69,6 @@ def calculate_field_at_point(pos, electrodes, lambda_values):
     return np.array([Ex, Ey, Ez])
 
 
-# Function to update the animation
 def update(frame):
     global quiver, particle_pos, particle_vel
     t = frame / 100  # Time step
@@ -79,23 +78,35 @@ def update(frame):
         -lambda_amplitude * np.sin(omega * t),
         -lambda_amplitude * np.sin(omega * t),
     ]
-
+    
     # Update particle dynamics
     E_particle = calculate_field_at_point(particle_pos, electrodes, lambda_values)
     particle_acc = (q / m) * E_particle
     particle_vel += particle_acc * dt
     particle_pos += particle_vel * dt
-    particle_trajectory.set_data_3d(*zip(*particle_positions))
 
     # Save particle position for trajectory
     particle_positions.append(particle_pos.copy())
 
+        # Debugging: Print particle positions
+    print("Particle Positions:", particle_positions)
+
+    
+    # Update particle trajectory
+    particle_trajectory.set_data_3d(
+        [pos[0] for pos in particle_positions],  # x-coordinates
+        [pos[1] for pos in particle_positions],  # y-coordinates
+        [pos[2] for pos in particle_positions],  # z-coordinates
+    )
+
+    # Update particle marker (current position)
+    particle_marker.set_data([particle_pos[0]], [particle_pos[1]])  # x and y as lists
+    particle_marker.set_3d_properties([particle_pos[2]])           # z as list
+    
     # Update electric field visualization
     Ex_total, Ey_total, Ez_total = np.zeros_like(X), np.zeros_like(Y), np.zeros_like(Z)
     for i, electrode in enumerate(electrodes):
-        Ex, Ey, Ez = calculate_field_from_electrode(
-            X, Y, Z, electrode, lambda_values[i]
-        )
+        Ex, Ey, Ez = calculate_field_from_electrode(X, Y, Z, electrode, lambda_values[i])
         Ex_total += Ex
         Ey_total += Ey
         Ez_total += Ez
@@ -103,24 +114,17 @@ def update(frame):
         norm_charge = (lambda_values[i] + lambda_amplitude) / (2 * lambda_amplitude)
         pole_color = pole_colormap(norm_charge)
         electrode_lines[i].set_color(pole_color)
-
+    
     field_magnitude = np.sqrt(Ex_total**2 + Ey_total**2 + Ez_total**2)
     field_magnitude_normalized = field_norm(field_magnitude)
     colors = arrow_colormap(field_magnitude_normalized.ravel())
-
+    
     if quiver:
         quiver.remove()
     quiver = ax.quiver(
-        X[::skip, ::skip, ::skip],
-        Y[::skip, ::skip, ::skip],
-        Z[::skip, ::skip, ::skip],
-        Ex_total[::skip, ::skip, ::skip],
-        Ey_total[::skip, ::skip, ::skip],
-        Ez_total[::skip, ::skip, ::skip],
-        length=0.01,
-        colors=colors[:: skip**3],
-        alpha=0.8,
-        normalize=True,
+        X[::skip, ::skip, ::skip], Y[::skip, ::skip, ::skip], Z[::skip, ::skip, ::skip],
+        Ex_total[::skip, ::skip, ::skip], Ey_total[::skip, ::skip, ::skip], Ez_total[::skip, ::skip, ::skip],
+        length=0.01, colors=colors[::skip**3], alpha=0.8, normalize=True
     )
     ax.set_title(f"Electric Field of Quadrupole (t = {t:.2f} s)")
 
@@ -132,6 +136,7 @@ ax = fig.add_subplot(111, projection="3d")
 (particle_trajectory,) = ax.plot(
     [], [], [], color="black", linewidth=2, label="Particle Trajectory"
 )
+particle_marker, = ax.plot([], [], [], 'o', color='black', markersize=5, label="Particle")
 
 # Compute field normalization for arrows
 field_min = 0
