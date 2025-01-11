@@ -1,7 +1,8 @@
-import numpy as np
 from typing import List, Tuple
-from simulation import Simulation
+
+import numpy as np
 from plot import animate_simulation
+from simulation import Simulation
 
 
 def voltages_over_time(t: float) -> List[float]:

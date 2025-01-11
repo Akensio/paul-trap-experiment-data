@@ -39,3 +39,13 @@ extend-exclude = '''
 ^.*/deprecated_old_simulation_files/.*$|
 ^.*/deprecated2/.*$
 '''
+
+[tool.isort]
+profile = "black"  # Makes isort compatible with black
+line_length = 88
+multi_line_output = 3
+include_trailing_comma = true
+skip_glob = [
+    "*/deprecated_old_simulation_files/*",
+    "*/deprecated2/*"
+]

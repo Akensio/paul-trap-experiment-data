@@ -1,8 +1,9 @@
-import numpy as np
-from trap import Trap
-from particle import Particle
 from typing import Callable, List, Tuple
+
+import numpy as np
 from numpy.typing import NDArray
+from particle import Particle
+from trap import Trap
 
 
 class Simulation:
