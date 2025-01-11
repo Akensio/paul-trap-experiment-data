@@ -5,6 +5,7 @@ from matplotlib.colors import Normalize
 from numpy.typing import NDArray
 from trap import Trap
 from typing import Tuple, Any
+from config import PLOT_CONFIG, COLOR_CONFIG
 
 
 class PaulTrapVisualizer:
@@ -15,7 +16,6 @@ class PaulTrapVisualizer:
         a: float,
         trap: Trap,
         dt: float,
-        field_resolution: int = 20,
     ) -> None:
         """Initialize the visualizer with simulation data."""
         self.positions = positions
@@ -23,7 +23,7 @@ class PaulTrapVisualizer:
         self.a = a
         self.trap = trap
         self.dt = dt
-        self.field_resolution = field_resolution
+        self.field_resolution = PLOT_CONFIG["field_resolution"]
         
         # Setup the plot
         self.setup_plot()
@@ -32,17 +32,27 @@ class PaulTrapVisualizer:
         
     def setup_plot(self) -> None:
         """Initialize the matplotlib figure and axes."""
-        self.fig, self.ax = plt.subplots(figsize=(8, 8))
-        self.ax.set_xlim(-1.5 * self.a, 1.5 * self.a)
-        self.ax.set_ylim(-1.5 * self.a, 1.5 * self.a)
+        self.fig, self.ax = plt.subplots(figsize=PLOT_CONFIG["figure_size"])
+        limit = self.a * PLOT_CONFIG["plot_limits_factor"]
+        self.ax.set_xlim(-limit, limit)
+        self.ax.set_ylim(-limit, limit)
         self.ax.set_xlabel("X")
         self.ax.set_ylabel("Y")
         self.ax.set_title("Particle Trajectory in Paul Trap (Animation with Field)")
         self.ax.grid()
 
-        # Plot the rods
-        self.ax.plot([self.a, -self.a, 0, 0], [0, 0, self.a, -self.a], "ro", label="Rods")
-        self.ax.legend()
+        # Plot the rods with initial colors
+        rod_positions = np.array([rod.position for rod in self.trap.rods])
+        self.rod_dots = self.ax.scatter(
+            rod_positions[:, 0], 
+            rod_positions[:, 1],
+            c=self.voltages_history[0],  # Initial voltages
+            cmap='RdBu_r',  # Red-White-Blue colormap (reversed)
+            norm=Normalize(vmin=-10, vmax=10),  # Match voltage range
+            s=100,  # Size of dots
+            zorder=5  # Ensure dots are on top
+        )
+        self.ax.legend(['Particle'])
 
         # Initialize particle and trajectory plots
         (self.particle_dot,) = self.ax.plot([], [], "bo", label="Particle")
@@ -102,14 +112,15 @@ class PaulTrapVisualizer:
 
     def handle_normal_frame(self, frame: int) -> tuple[Any, ...]:
         """Handle a normal frame of the animation."""
-        self.current_frame = frame  # Update current frame
+        self.current_frame = frame
         x_traj, y_traj = self.positions[:frame, 0], self.positions[:frame, 1]
         self.particle_dot.set_data([x_traj[-1]], [y_traj[-1]])
         self.trajectory_line.set_data(x_traj, y_traj)
         
         self.trap.set_voltages(self.voltages_history[frame])
         self.update_field()
-        return self.particle_dot, self.trajectory_line, self.quiver
+        self.update_rod_colors(frame)
+        return self.particle_dot, self.trajectory_line, self.quiver, self.rod_dots
 
     def calculate_field_colors(self) -> NDArray[np.float64]:
         """Calculate colors based on the electric potential."""
@@ -172,3 +183,7 @@ class PaulTrapVisualizer:
             interval=20,
         )
         plt.show()
+
+    def update_rod_colors(self, frame: int) -> None:
+        """Update the rod colors based on their current voltages."""
+        self.rod_dots.set_array(np.array(self.voltages_history[frame]))

@@ -1,32 +1,47 @@
-from typing import List, Tuple
+from typing import List
 
 import numpy as np
+
+from config import SIMULATION_CONFIG
+from constants import (
+    ROD_DISTANCE,
+    VOLTAGE_AMPLITUDE,
+    DRIVING_FREQUENCY,
+    PARTICLE_CHARGE,
+    PARTICLE_MASS,
+    INITIAL_POSITION,
+    INITIAL_VELOCITY,
+)
 from simulation import Simulation
 from plot import PaulTrapVisualizer
 
 
 def voltages_over_time(t: float) -> List[float]:
-    # Oscillating voltages for rods
-    return [
-        10 * np.sin(2 * np.pi * t),
-        10 * np.sin(2 * np.pi * t),
-        -10 * np.sin(2 * np.pi * t),
-        -10 * np.sin(2 * np.pi * t),
-    ]
+    """Calculate oscillating voltages for rods at time t."""
+    voltage = VOLTAGE_AMPLITUDE * np.sin(2 * np.pi * DRIVING_FREQUENCY * t)
+    return [voltage, voltage, -voltage, -voltage]
 
 
 if __name__ == "__main__":
-    a: float = 1  # Rod distance
-    charge: float = 1
-    mass: float = 1
-    initial_position: Tuple[float, float] = (0.1, 0.1)
-    initial_velocity: Tuple[float, float] = (0, 0)
-    dt: float = 0.01
-    total_time: float = 10
+    simulation = Simulation(
+        a=ROD_DISTANCE,
+        charge=PARTICLE_CHARGE,
+        mass=PARTICLE_MASS,
+        initial_position=INITIAL_POSITION,
+        initial_velocity=INITIAL_VELOCITY,
+        dt=SIMULATION_CONFIG["dt"]
+    )
+    
+    positions, voltages_history = simulation.run(
+        voltages_over_time, 
+        SIMULATION_CONFIG["total_time"]
+    )
 
-    simulation = Simulation(a, charge, mass, initial_position, initial_velocity, dt)
-    positions, voltages_history = simulation.run(voltages_over_time, total_time)
-
-    # Create visualizer and run animation
-    visualizer = PaulTrapVisualizer(positions, voltages_history, a, simulation.trap, dt)
+    visualizer = PaulTrapVisualizer(
+        positions=positions,
+        voltages_history=voltages_history,
+        a=ROD_DISTANCE,
+        trap=simulation.trap,
+        dt=SIMULATION_CONFIG["dt"]
+    )
     visualizer.animate()
