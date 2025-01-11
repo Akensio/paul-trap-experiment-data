@@ -18,4 +18,6 @@ if __name__ == "__main__":
 
     simulation = Simulation(a, charge, mass, initial_position, initial_velocity, dt)
     positions = simulation.run(voltages_over_time, total_time)
-    animate_simulation(positions, a)
+
+    # Pass the trap to the animate function
+    animate_simulation(positions, a, simulation.trap)
