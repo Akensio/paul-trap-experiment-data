@@ -4,6 +4,7 @@ import numpy as np
 from numpy.typing import NDArray
 from particle import Particle
 from trap import Trap
+from config import SIMULATION_CONFIG
 
 
 class Simulation:

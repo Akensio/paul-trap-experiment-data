@@ -46,17 +46,29 @@ class PaulTrapVisualizer:
         self.rod_dots = self.ax.scatter(
             rod_positions[:, 0], 
             rod_positions[:, 1],
-            c=self.voltages_history[0],  # Initial voltages
-            cmap='RdBu_r',  # Red-White-Blue colormap (reversed)
-            norm=Normalize(vmin=-10, vmax=10),  # Match voltage range
-            s=100,  # Size of dots
-            zorder=5  # Ensure dots are on top
+            c=self.voltages_history[0],
+            cmap=COLOR_CONFIG["colormap"],
+            norm=Normalize(vmin=COLOR_CONFIG["voltage_range"][0], 
+                         vmax=COLOR_CONFIG["voltage_range"][1]),
+            s=PLOT_CONFIG["rod_dot_size"],
+            zorder=PLOT_CONFIG["rod_zorder"]
         )
-        self.ax.legend(['Particle'])
 
         # Initialize particle and trajectory plots
-        (self.particle_dot,) = self.ax.plot([], [], "bo", label="Particle")
-        (self.trajectory_line,) = self.ax.plot([], [], "b-", lw=1, label="Trajectory")
+        (self.particle_dot,) = self.ax.plot(
+            [], [], 
+            "o",
+            color=COLOR_CONFIG["particle_color"],
+            label="Particle"
+        )
+        (self.trajectory_line,) = self.ax.plot(
+            [], [], 
+            "-",
+            color=COLOR_CONFIG["trajectory_color"],
+            lw=PLOT_CONFIG["trajectory_line_width"],
+            label="Trajectory"
+        )
+        self.ax.grid(color=COLOR_CONFIG["grid_color"])
 
     def setup_field_grid(self) -> None:
         """Setup the grid for the electric field quiver plot."""
@@ -165,10 +177,10 @@ class PaulTrapVisualizer:
         self.quiver = self.ax.quiver(
             self.X, self.Y, self.Ex, self.Ey,
             colors.flatten(),
-            cmap='RdBu_r',  # Red-White-Blue colormap (reversed)
+            cmap=COLOR_CONFIG["colormap"],
             norm=norm,
-            alpha=0.6,
-            scale=15
+            alpha=PLOT_CONFIG["quiver_alpha"],
+            scale=PLOT_CONFIG["quiver_scale"]
         )
         
         # Add colorbar
@@ -180,7 +192,7 @@ class PaulTrapVisualizer:
             frames=len(self.positions),
             init_func=self.init_animation,
             blit=True,
-            interval=20,
+            interval=PLOT_CONFIG["animation_interval"],
         )
         plt.show()
 
