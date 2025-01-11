@@ -34,12 +34,13 @@ if __name__ == "__main__":
         dt=SIMULATION_CONFIG.dt,
     )
 
-    positions, voltages_history = simulation.run(
+    positions, velocities, voltages_history = simulation.run(
         voltages_over_time, SIMULATION_CONFIG.total_time
     )
 
     visualizer = PaulTrapVisualizer(
         positions=positions,
+        velocities=velocities,
         voltages_history=voltages_history,
         a=ROD_DISTANCE,
         trap=simulation.trap,

@@ -28,16 +28,18 @@ class Simulation:
 
     def run(
         self, voltages_over_time: Callable[[float], List[float]], total_time: float
-    ) -> Tuple[NDArray[np.float64], NDArray[np.float64]]:
+    ) -> Tuple[NDArray[np.float64], NDArray[np.float64], NDArray[np.float64]]:
         """
         Run the simulation.
         :param voltages_over_time: Function providing voltages at a given time.
         :param total_time: Total simulation time.
-        :return: Lists of particle positions and voltages over time.
+        :return: Tuple of (positions, velocities, voltages) over time.
         """
         positions: List[NDArray[np.float64]] = []
+        velocities: List[NDArray[np.float64]] = []
         voltages_history: List[List[float]] = []
         time_steps: int = int(total_time / self.dt)
+        
         for t in range(time_steps):
             t_actual = t * self.dt
             voltages = voltages_over_time(t_actual)
@@ -49,6 +51,7 @@ class Simulation:
             self.particle.update(electric_field, self.dt)
 
             positions.append(self.particle.position.copy())
+            velocities.append(self.particle.velocity.copy())
             voltages_history.append(voltages.copy())
 
-        return np.array(positions), np.array(voltages_history)
+        return np.array(positions), np.array(velocities), np.array(voltages_history)

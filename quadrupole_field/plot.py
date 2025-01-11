@@ -14,6 +14,7 @@ class PaulTrapVisualizer:
     def __init__(
         self,
         positions: NDArray[np.float64],
+        velocities: NDArray[np.float64],
         voltages_history: NDArray[np.float64],
         a: float,
         trap: Trap,
@@ -21,6 +22,7 @@ class PaulTrapVisualizer:
     ) -> None:
         """Initialize the visualizer with simulation data."""
         self.positions = positions
+        self.velocities = velocities
         self.voltages_history = voltages_history
         self.a = a
         self.trap = trap
@@ -31,6 +33,15 @@ class PaulTrapVisualizer:
         self.setup_plot()
         self.setup_field_grid()
         self.calculate_max_field()
+
+        # Add velocity text
+        self.velocity_text = self.ax.text(
+            0.02, 0.98, '',  # Position in axes coordinates
+            transform=self.ax.transAxes,  # Use axes coordinates
+            verticalalignment='top',
+            fontsize=10,
+            bbox=dict(facecolor='white', alpha=0.7, edgecolor='none')
+        )
 
     def setup_plot(self) -> None:
         """Initialize the matplotlib figure and axes."""
@@ -108,20 +119,35 @@ class PaulTrapVisualizer:
         self.particle_dot.set_data([], [])
         self.trajectory_line.set_data([], [])
         self.quiver.set_UVC(self.Ex, self.Ey)
-        return self.particle_dot, self.trajectory_line, self.quiver
+        self.velocity_text.set_text('')
+        return self.particle_dot, self.trajectory_line, self.quiver, self.velocity_text
 
     def update_frame(self, frame: int) -> tuple[Any, ...]:
         """Update function for each animation frame."""
         if frame == 0:
             return self.handle_first_frame()
-        return self.handle_normal_frame(frame)
+        
+        # Update velocity display using stored velocity
+        velocity = np.linalg.norm(self.velocities[frame])
+        self.velocity_text.set_text(f'Velocity: {velocity:.2f} m/s')
+        
+        self.current_frame = frame
+        x_traj, y_traj = self.positions[:frame, 0], self.positions[:frame, 1]
+        self.particle_dot.set_data([x_traj[-1]], [y_traj[-1]])
+        self.trajectory_line.set_data(x_traj, y_traj)
+
+        self.trap.set_voltages(self.voltages_history[frame])
+        self.update_field()
+        self.update_rod_colors(frame)
+        
+        return self.particle_dot, self.trajectory_line, self.quiver, self.rod_dots, self.velocity_text
 
     def handle_first_frame(self) -> tuple[Any, ...]:
         """Handle the first frame of the animation."""
         self.particle_dot.set_data([self.positions[0, 0]], [self.positions[0, 1]])
         self.trajectory_line.set_data([], [])
         self.update_field()
-        return self.particle_dot, self.trajectory_line, self.quiver
+        return self.particle_dot, self.trajectory_line, self.quiver, self.velocity_text
 
     def handle_normal_frame(self, frame: int) -> tuple[Any, ...]:
         """Handle a normal frame of the animation."""
@@ -133,7 +159,7 @@ class PaulTrapVisualizer:
         self.trap.set_voltages(self.voltages_history[frame])
         self.update_field()
         self.update_rod_colors(frame)
-        return self.particle_dot, self.trajectory_line, self.quiver, self.rod_dots
+        return self.particle_dot, self.trajectory_line, self.quiver, self.rod_dots, self.velocity_text
 
     def calculate_field_colors(self) -> NDArray[np.float64]:
         """Calculate colors based on the electric potential."""
