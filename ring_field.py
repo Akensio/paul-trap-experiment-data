@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 from matplotlib.animation import FuncAnimation
+from matplotlib.colors import Normalize
 
 # Constants
 k = 8.9875517923e9  # Coulomb's constant, N·m²/C²
@@ -23,13 +24,7 @@ y = np.linspace(-0.5, 0.5, 10)
 z = np.linspace(-0.5, 0.5, 9)
 X, Y, Z = np.meshgrid(x, y, z)
 
-# Placeholder for the quiver plot
-quiver = None
-
-# Fixed color scale bounds
-FIELD_MIN = 0  # Minimum field magnitude for the color scale
-
-# Function to estimate FIELD_MAX
+# Dynamically compute FIELD_MAX
 def calculate_field_max():
     Ex_max, Ey_max, Ez_max = np.zeros_like(X), np.zeros_like(Y), np.zeros_like(Z)
     max_charge = charge_amplitude  # Maximum charge
@@ -47,9 +42,25 @@ def calculate_field_max():
     field_magnitude_max = np.sqrt(Ex_max**2 + Ey_max**2 + Ez_max**2)
     return np.max(field_magnitude_max)
 
-# Dynamically compute FIELD_MAX
 FIELD_MAX = calculate_field_max()
+FIELD_MIN = 0  # Minimum field magnitude
+
 print(f"Calculated FIELD_MAX: {FIELD_MAX}")
+
+# Create normalization and colormap
+norm = Normalize(vmin=FIELD_MIN, vmax=FIELD_MAX)
+colormap = cm.get_cmap('jet')
+
+# Create a figure and 3D axes
+fig = plt.figure(figsize=(12, 10))
+ax = fig.add_subplot(111, projection='3d')
+
+# Plot the charged ring
+ax.plot(ring_x, ring_y, ring_z, color='red', linewidth=2, label="Charged Ring")
+
+# Placeholder for the quiver plot
+quiver = None
+
 # Function to calculate electric field
 def calculate_field(charge):
     Ex, Ey, Ez = np.zeros_like(X), np.zeros_like(Y), np.zeros_like(Z)
@@ -72,11 +83,8 @@ def update(frame):
     field_magnitude = np.sqrt(Ex**2 + Ey**2 + Ez**2)
     
     # Normalize field magnitudes using fixed scale
-    field_magnitude_normalized = (field_magnitude - FIELD_MIN) / (FIELD_MAX - FIELD_MIN)
-    field_magnitude_normalized = np.clip(field_magnitude_normalized, 0, 1)  # Ensure values are in [0, 1]
-    
-    # Map magnitudes to colors using the fixed scale
-    colors = cm.jet(field_magnitude_normalized.ravel())
+    field_magnitude_normalized = norm(field_magnitude)
+    colors = colormap(field_magnitude_normalized.ravel())
     
     # Clear previous quiver
     if quiver:
@@ -89,13 +97,11 @@ def update(frame):
     )
     ax.set_title(f"Electric Field Around a Charged Ring (Time: {frame})")
 
-# Create a figure and 3D axes
-fig = plt.figure(figsize=(12, 10))
-ax = fig.add_subplot(111, projection='3d')
-
-# Plot the charged ring
-ax.plot(ring_x, ring_y, ring_z, color='red', linewidth=2, label="Charged Ring")
-ax.legend()
+# Add colorbar to the plot
+scalar_mappable = cm.ScalarMappable(cmap=colormap, norm=norm)
+scalar_mappable.set_array([])  # Required for colorbar
+cbar = fig.colorbar(scalar_mappable, ax=ax, shrink=0.7, aspect=15, pad=0.1)
+cbar.set_label("Electric Field Magnitude (N/C)")
 
 # Create animation
 ani = FuncAnimation(fig, update, frames=100, interval=50)
