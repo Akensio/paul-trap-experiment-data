@@ -11,7 +11,7 @@ VOLTAGE_AMPLITUDE: float = 10.0             # volts
 DRIVING_FREQUENCY: float = 1.0              # Hz
 
 # Particle parameters
-PARTICLE_CHARGE: float = ELEMENTARY_CHARGE  # Coulomb
-PARTICLE_MASS: float = ELECTRON_MASS       # kg
+PARTICLE_CHARGE: float = 1  # Coulomb
+PARTICLE_MASS: float = 1       # kg
 INITIAL_POSITION: tuple[float, float] = (0.1, 0.1)  # meters
 INITIAL_VELOCITY: tuple[float, float] = (0.0, 0.0)  # meters/second
