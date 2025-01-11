@@ -14,7 +14,6 @@ class FieldVisualizer:
         self.trap = trap
         self.a = a
         self.setup_field_grid()
-        self.calculate_max_field()
         self.setup_field_plot()
 
     def setup_field_grid(self) -> None:
@@ -22,36 +21,41 @@ class FieldVisualizer:
         x = np.linspace(-self.a * 1.2, self.a * 1.2, PLOT_CONFIG.field_resolution)
         y = np.linspace(-self.a * 1.2, self.a * 1.2, PLOT_CONFIG.field_resolution)
         self.X, self.Y = np.meshgrid(x, y)
-        self.Ex = np.zeros_like(self.X)
-        self.Ey = np.zeros_like(self.Y)
 
-    def calculate_max_field(self) -> None:
-        """Calculate the maximum field strength for normalization."""
+    def calculate_field(self) -> Tuple[NDArray[np.float64], NDArray[np.float64]]:
+        """Calculate the current electric field."""
+        Ex = np.zeros_like(self.X)
+        Ey = np.zeros_like(self.Y)
+        
         for i in range(self.X.shape[0]):
             for j in range(self.X.shape[1]):
-                Ex, Ey = self.trap.electric_field_at(self.X[i, j], self.Y[i, j])
-                self.Ex[i, j] = Ex
-                self.Ey[i, j] = Ey
-        self.max_magnitude = np.sqrt(self.Ex**2 + self.Ey**2).max()
+                Ex[i, j], Ey[i, j] = self.trap.electric_field_at(
+                    self.X[i, j], self.Y[i, j]
+                )
+        
+        return Ex, Ey
 
-    def calculate_field_colors(self) -> NDArray[np.float64]:
+    def calculate_field_colors(self, Ex: NDArray[np.float64], Ey: NDArray[np.float64]) -> NDArray[np.float64]:
         """Calculate colors based on electric potential."""
-        return self.Ex**2 + self.Ey**2
+        return Ex**2 + Ey**2
 
     def setup_field_plot(self) -> None:
         """Initialize the electric field quiver plot."""
-        # Create quiver with initial colors
-        colors = self.calculate_field_colors()
-        norm = Normalize(vmin=-np.max(np.abs(colors)), vmax=np.max(np.abs(colors)))
+        # Calculate initial field
+        Ex, Ey = self.calculate_field()
+        colors = self.calculate_field_colors(Ex, Ey)
+        
+        # Set up normalization
+        self.norm = Normalize(vmin=0, vmax=np.max(np.abs(colors)))
 
         self.quiver = self.ax.quiver(
             self.X,
             self.Y,
-            self.Ex,
-            self.Ey,
+            Ex,
+            Ey,
             colors.flatten(),
             cmap=COLOR_CONFIG.colormap,
-            norm=norm,
+            norm=self.norm,
             alpha=PLOT_CONFIG.quiver_alpha,
             scale=PLOT_CONFIG.quiver_scale,
         )
@@ -61,14 +65,7 @@ class FieldVisualizer:
 
     def update(self) -> None:
         """Update the electric field visualization."""
-        Ex_norm, Ey_norm = self.normalize_field(self.Ex, self.Ey)
-        self.quiver.set_UVC(Ex_norm, Ey_norm)
-
-    def normalize_field(
-        self, Ex: NDArray[np.float64], Ey: NDArray[np.float64]
-    ) -> Tuple[NDArray[np.float64], NDArray[np.float64]]:
-        """Normalize the electric field vectors."""
-        if self.max_magnitude > 0:
-            Ex = Ex / self.max_magnitude
-            Ey = Ey / self.max_magnitude
-        return Ex, Ey 
+        Ex, Ey = self.calculate_field()
+        colors = self.calculate_field_colors(Ex, Ey)
+        
+        self.quiver.set_UVC(Ex, Ey, colors.flatten()) 
