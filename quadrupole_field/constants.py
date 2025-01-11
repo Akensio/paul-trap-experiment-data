@@ -7,11 +7,8 @@ PROTON_MASS: float = 1.67262192369e-27     # kg
 
 # Trap parameters
 ROD_DISTANCE: float = 1.0                   # meters
-VOLTAGE_AMPLITUDE: float = 10.0             # volts
 DRIVING_FREQUENCY: float = 1.0              # Hz
 
 # Particle parameters
-PARTICLE_CHARGE: float = 1  # Coulomb
-PARTICLE_MASS: float = 1       # kg
-INITIAL_POSITION: tuple[float, float] = (0.1, 0.1)  # meters
-INITIAL_VELOCITY: tuple[float, float] = (0.0, 0.0)  # meters/second
+PARTICLE_CHARGE: float = 1.0                # Coulomb
+PARTICLE_MASS: float = 1.0                  # kg

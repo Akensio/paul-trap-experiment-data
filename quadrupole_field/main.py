@@ -5,16 +5,19 @@ import numpy as np
 from config import SIMULATION_CONFIG
 from constants import (
     ROD_DISTANCE,
-    VOLTAGE_AMPLITUDE,
     DRIVING_FREQUENCY,
     PARTICLE_CHARGE,
     PARTICLE_MASS,
-    INITIAL_POSITION,
-    INITIAL_VELOCITY,
 )
+from initialize import get_initial_parameters
 from simulation import Simulation
 from plot import PaulTrapVisualizer
 
+# Get initial parameters
+params = get_initial_parameters()
+VOLTAGE_AMPLITUDE = params["voltage_amplitude"]
+INITIAL_POSITION = params["initial_position"]
+INITIAL_VELOCITY = params["initial_velocity"]
 
 def voltages_over_time(t: float) -> List[float]:
     """Calculate oscillating voltages for rods at time t."""
