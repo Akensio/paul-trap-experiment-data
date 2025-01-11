@@ -1,8 +1,6 @@
 import numpy as np
-from numba import njit
 from constants import epsilon_0
 
-@njit
 def calculate_field_from_electrode(X, Y, Z, electrode_pos, lambda_charge):
     """
     Calculate the electric field components from a single infinite electrode.
@@ -16,7 +14,6 @@ def calculate_field_from_electrode(X, Y, Z, electrode_pos, lambda_charge):
     Ey = E_magnitude * (Y - electrode_pos[1]) / (R_perp + 1e-9)
     return Ex, Ey, Ez
 
-@njit
 def calculate_field_at_point(pos, electrodes, lambda_values):
     """
     Calculates the net electric field at a specific point due to multiple electrodes.
