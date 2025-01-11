@@ -5,19 +5,15 @@ from constants import (
     PARTICLE_MASS,
     DRIVING_FREQUENCY
 )
-from stability import suggest_stable_parameters
+from stability import suggest_diamond_orbit_parameters
 
 def get_initial_parameters():
     """Get the initial parameters for the simulation."""
-    params = suggest_stable_parameters(
+    params = suggest_diamond_orbit_parameters(
         rod_distance=ROD_DISTANCE,
         particle_charge=PARTICLE_CHARGE,
         particle_mass=PARTICLE_MASS,
         driving_freq=DRIVING_FREQUENCY
     )
     
-    return {
-        "voltage_amplitude": params["voltage_amplitude"],
-        "initial_position": params["initial_position"],
-        "initial_velocity": params["initial_velocity"]
-    } 
+    return params 
