@@ -1,8 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
-from matplotlib.colors import Normalize
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.colors import Normalize, LinearSegmentedColormap
 from matplotlib.animation import FuncAnimation
 
 # Constants
@@ -12,7 +12,6 @@ a = 0.1  # Distance of electrodes from origin (m)
 omega = 2 * np.pi  # Angular frequency of oscillation (rad/s)
 
 # Define grid for field calculation
-grid_size = 25
 x = np.linspace(-0.1, 0.1, 10)
 y = np.linspace(-0.1, 0.1, 10)
 z = np.linspace(-0.1, 0.1, 9)
@@ -26,28 +25,29 @@ electrodes = [
     {'position': [0, a, 0]},   # Electrode at (0, +a)
 ]
 
+# Create custom colormaps
+# For field arrows: Neutral gradient (gray to lime green)
+arrow_colors = [(0, "gray"), (0.5, "cyan"), (1, "blue")]
+arrow_colormap = LinearSegmentedColormap.from_list("arrow_colormap", arrow_colors)
+
+# For electrodes: Gradient from yellow (negative) to green (positive)
+pole_colors = [(0, "red"), (1, "blue")]
+pole_colormap = LinearSegmentedColormap.from_list("pole_colormap", pole_colors)
+
 # Function to calculate the electric field due to a single infinite electrode
 def calculate_field_from_electrode(X, Y, Z, electrode, lambda_charge):
     Ex, Ey, Ez = np.zeros_like(X), np.zeros_like(Y), np.zeros_like(Z)
     electrode_pos = np.array(electrode['position'])
-    
-    # Calculate the perpendicular distance to the electrode axis
-    R_perp = np.sqrt(
-        (X - electrode_pos[0])**2 + (Y - electrode_pos[1])**2
-    )
-    
-    # Electric field magnitude (1/r dependence)
-    E_magnitude = (lambda_charge / (2 * np.pi * epsilon_0)) / (R_perp + 1e-9)  # Avoid division by zero
+    R_perp = np.sqrt((X - electrode_pos[0])**2 + (Y - electrode_pos[1])**2)
+    E_magnitude = (lambda_charge / (2 * np.pi * epsilon_0)) / (R_perp + 1e-9)
     Ex = E_magnitude * (X - electrode_pos[0]) / (R_perp + 1e-9)
     Ey = E_magnitude * (Y - electrode_pos[1]) / (R_perp + 1e-9)
-    # Ez remains zero (no field in the z-direction)
-    
     return Ex, Ey, Ez
 
 # Function to update the animation
 def update(frame):
     global quiver
-    t = frame / 100  # Time step (scale as needed)
+    t = frame / 100  # Time step
     lambda_values = [
         lambda_amplitude * np.sin(omega * t),  # Oscillating charge density for electrode 1
         lambda_amplitude * np.sin(omega * t), # Opposite charge density for electrode 2
@@ -61,11 +61,16 @@ def update(frame):
         Ex_total += Ex
         Ey_total += Ey
         Ez_total += Ez
+
+        # Gradient color for poles
+        norm_charge = (lambda_values[i] + lambda_amplitude) / (2 * lambda_amplitude)  # Normalize to [0, 1]
+        pole_color = pole_colormap(norm_charge)
+        electrode_lines[i].set_color(pole_color)
     
     # Compute the field magnitude and normalize
     field_magnitude = np.sqrt(Ex_total**2 + Ey_total**2 + Ez_total**2)
-    field_magnitude_normalized = norm(field_magnitude)
-    colors = colormap(field_magnitude_normalized.ravel())
+    field_magnitude_normalized = field_norm(field_magnitude)
+    colors = arrow_colormap(field_magnitude_normalized.ravel())
     
     # Clear previous quiver
     if quiver:
@@ -79,33 +84,34 @@ def update(frame):
     )
     ax.set_title(f"Electric Field of Quadrupole (t = {t:.2f} s)")
 
-# Compute field magnitude for consistent normalization
-FIELD_MIN = 0
-FIELD_MAX = lambda_amplitude / (2 * np.pi * epsilon_0 * 0.1)  # Approximate maximum field
-norm = Normalize(vmin=FIELD_MIN, vmax=FIELD_MAX)
-colormap = cm.get_cmap('jet')
+# Compute field normalization for arrows
+field_min = 0
+field_max = lambda_amplitude / (2 * np.pi * epsilon_0 * 0.1)
+field_norm = Normalize(vmin=field_min, vmax=field_max)
 
 # Create figure and axes
 fig = plt.figure(figsize=(12, 10))
 ax = fig.add_subplot(111, projection='3d')
 
 # Plot the electrodes
-for i, electrode in enumerate(electrodes):
+electrode_lines = []
+for electrode in electrodes:
     pos = electrode['position']
-    z_range = np.linspace(-0.1, 0.1, 100)  # Infinite approximation
+    z_range = np.linspace(-0.1, 0.1, 100)
     x_coords = np.full_like(z_range, pos[0])
     y_coords = np.full_like(z_range, pos[1])
-    ax.plot(
+    line, = ax.plot(
         x_coords, y_coords, z_range,
-        linewidth=3, color='red' if i % 2 == 0 else 'blue'
+        linewidth=3, color='gray'  # Initial neutral color
     )
+    electrode_lines.append(line)
 
 # Placeholder for quiver plot
 quiver = None
-skip = 1  # Reduce density of quiver plot
+skip = 1
 
-# Add colorbar
-scalar_mappable = cm.ScalarMappable(cmap=colormap, norm=norm)
+# Add colorbar for field arrows
+scalar_mappable = cm.ScalarMappable(cmap=arrow_colormap, norm=field_norm)
 scalar_mappable.set_array([])
 cbar = fig.colorbar(scalar_mappable, ax=ax, shrink=0.7, aspect=15, pad=0.1)
 cbar.set_label("Electric Field Magnitude (N/C)")
