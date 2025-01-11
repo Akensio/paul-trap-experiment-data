@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from matplotlib.colors import Normalize
+from matplotlib.cm import ScalarMappable
 from constants import *
 from field_calculations import calculate_field_from_electrode
 from particle_dynamics import update_particle_position
@@ -15,7 +16,9 @@ particle_vel = np.array([0, 0.01, 0])  # Starting velocity
 particle_positions = [particle_pos.copy()]  # List to store trajectory
 
 # Set up visualization
-fig, ax, arrow_colormap, pole_colormap, particle_trajectory, particle_marker = setup_visualization()
+fig, ax, arrow_colormap, pole_colormap, particle_trajectory, particle_marker = (
+    setup_visualization()
+)
 
 # Create electrode lines
 electrode_lines = []
@@ -25,20 +28,44 @@ for electrode in electrodes:
     x_coords = np.full_like(z_range, pos[0])
     y_coords = np.full_like(z_range, pos[1])
     (line,) = ax.plot(
-        x_coords, y_coords, z_range, linewidth=3, color="gray"  # Neutral color initially
+        x_coords,
+        y_coords,
+        z_range,
+        linewidth=3,
+        color="gray",  # Neutral color initially
     )
     electrode_lines.append(line)
 
 # Normalize field magnitudes
 field_norm = Normalize(vmin=0, vmax=lambda_amplitude / (2 * np.pi * epsilon_0 * 0.1))
 
+# Add field magnitude colorbar
+field_colorbar = fig.colorbar(
+    ScalarMappable(norm=field_norm, cmap=arrow_colormap),
+    ax=ax,
+    shrink=0.7,
+    aspect=15,
+    pad=0.1,
+)
+field_colorbar.set_label("Electric Field Magnitude (N/C)")
+
+# Add electrode charge colorbar
+charge_norm = Normalize(vmin=-lambda_amplitude, vmax=lambda_amplitude)
+charge_colorbar = fig.colorbar(
+    ScalarMappable(norm=charge_norm, cmap=pole_colormap),
+    ax=ax,
+    shrink=0.7,
+    aspect=15,
+    pad=0.05,
+)
+charge_colorbar.set_label("Electrode Charge (C/m)")
+
 # Placeholder for quiver plot (electric field visualization)
 quiver = None
 
+
 # Update function for the animation
-def update(
-    frame
-):
+def update(frame):
     """
     Updates the animation for each frame.
 
@@ -87,7 +114,9 @@ def update(
     # Calculate electric field
     Ex_total, Ey_total, Ez_total = np.zeros_like(X), np.zeros_like(Y), np.zeros_like(Z)
     for i, electrode in enumerate(electrodes):
-        Ex, Ey, Ez = calculate_field_from_electrode(X, Y, Z, electrode, lambda_values[i])
+        Ex, Ey, Ez = calculate_field_from_electrode(
+            X, Y, Z, electrode, lambda_values[i]
+        )
         Ex_total += Ex
         Ey_total += Ey
         Ez_total += Ez
@@ -101,9 +130,16 @@ def update(
     if quiver:
         quiver.remove()
     quiver = ax.quiver(
-        X, Y, Z,
-        Ex_total, Ey_total, Ez_total,
-        length=0.01, colors=colors, alpha=0.8, normalize=True
+        X,
+        Y,
+        Z,
+        Ex_total,
+        Ey_total,
+        Ez_total,
+        length=0.01,
+        colors=colors,
+        alpha=0.8,
+        normalize=True,
     )
 
     # Update the plot title with the current time
