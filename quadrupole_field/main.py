@@ -42,6 +42,7 @@ def update(frame):
 
     # Current simulation time
     t = frame * dt
+    print(f"t is {t}")
 
     # Dynamic charge densities
     lambda_values = [
@@ -50,6 +51,9 @@ def update(frame):
         -lambda_amplitude * np.sin(omega * t),
         -lambda_amplitude * np.sin(omega * t),
     ]
+    print(f"t: {t}")
+    print(f"omega * t {omega * t}")
+    print(f"lambda values: {lambda_values}")
 
     # Update particle dynamics
     particle_pos, particle_vel = update_particle_position(
@@ -70,6 +74,7 @@ def update(frame):
 
     # Update electrode colors dynamically
     for i, electrode_line in enumerate(electrode_lines):
+        # Normalize lambda_value: Set a maximum negative value (-lambda_amplitude) to zero, and maximum positive value (lambda_amplitude) to 1
         norm_charge = (lambda_values[i] + lambda_amplitude) / (2 * lambda_amplitude)
         pole_color = pole_colormap(norm_charge)
         electrode_line.set_color(pole_color)
@@ -84,6 +89,7 @@ def update(frame):
 
     # Update the electric field quiver plot
     quiver = update_quiver(ax, X, Y, Z, Ex_total, Ey_total, Ez_total, field_norm, arrow_colormap, quiver)
+    ax.set_title(f"Electric Field of Quadrupole (t = {t:.2f} s)")
 
-ani = FuncAnimation(fig, update, frames=100, interval=50)
+ani = FuncAnimation(fig, update, frames=3000, interval=50)
 plt.show()

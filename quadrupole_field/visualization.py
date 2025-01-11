@@ -26,9 +26,9 @@ def setup_visualization():
     particle_marker, = ax.plot([], [], [], "o", color="black", markersize=5, label="Particle")
 
     # Set axis limits and labels
-    ax.set_xlim([-0.15, 0.15])
-    ax.set_ylim([-0.15, 0.15])
-    ax.set_zlim([-0.15, 0.15])
+    ax.set_xlim([-0.12, 0.12])
+    ax.set_ylim([-0.12, 0.12])
+    ax.set_zlim([-0.12, 0.12])
     ax.set_xlabel("X (m)")
     ax.set_ylabel("Y (m)")
     ax.set_zlabel("Z (m)")

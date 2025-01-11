@@ -11,7 +11,7 @@ omega = 2 * np.pi  # Angular frequency of oscillation (rad/s)
 # Particle properties
 q = 1e-10  # Charge of the particle (C)
 m = 1e-6  # Mass of the particle (kg)
-dt = 1e-4  # Time step for numerical integration (s)
+dt = 1e-2  # Time step for numerical integration (s)
 
 # Grid
 x = np.linspace(-0.1, 0.1, 10)
