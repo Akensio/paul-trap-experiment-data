@@ -5,7 +5,9 @@ from particle import Particle
 
 
 class Simulation:
-    def __init__(self, rod_positions, a, charge, mass, initial_position, initial_velocity, dt):
+    def __init__(
+        self, rod_positions, a, charge, mass, initial_position, initial_velocity, dt
+    ):
         self.field = ElectricField(rod_positions, a)
         self.particle = Particle(charge, mass, initial_position, initial_velocity)
         self.dt = dt
@@ -23,9 +25,7 @@ class Simulation:
             t_actual = t * self.dt
             voltages = voltages_over_time(t_actual)
             electric_field = self.field.compute_field(
-                self.particle.position[0],
-                self.particle.position[1],
-                voltages
+                self.particle.position[0], self.particle.position[1], voltages
             )
             self.particle.update(electric_field, self.dt)
             positions.append(self.particle.position.copy())
