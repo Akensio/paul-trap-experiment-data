@@ -10,12 +10,12 @@ from quadrupole_field.simulation.constants import (
     ROD_DISTANCE,
 )
 from quadrupole_field.utils.initialization import get_initial_parameters
-from quadrupole_field.utils.orbit import OrbitParameters
+from quadrupole_field.utils.stable_orbit_params import StableOrbitParameters
 from quadrupole_field.visualization.paul_trap_display import PaulTrapVisualizer
 from quadrupole_field.simulation.simulation import Simulation
 
 # Get initial parameters with the new diamond orbit calculations
-params: OrbitParameters = get_initial_parameters()
+params: StableOrbitParameters = get_initial_parameters()
 
 def voltages_over_time(t: float) -> List[float]:
     """Calculate oscillating voltages for rods at time t."""

@@ -4,7 +4,7 @@ from typing import Tuple
 
 import numpy as np
 
-from quadrupole_field.utils.stable_orbit_params import OrbitParameters
+from quadrupole_field.utils.stable_orbit_params import StableOrbitParameters
 
 
 def calculate_secular_frequency(q: float, driving_freq: float) -> float:
@@ -45,10 +45,10 @@ def suggest_diamond_orbit_parameters(
     particle_charge: float,
     particle_mass: float,
     driving_freq: float,
-) -> OrbitParameters:
+) -> StableOrbitParameters:
     """
     Suggest parameters for a diamond-shaped orbit in a quadrupole Paul trap.
-    Returns an OrbitParameters object with recommended values.
+    Returns an StableOrbitParameters object with recommended values.
     """
     # Keep the same q for stability
     target_q = 0.3  # Smaller q ensures stability within Mathieu's stability region
@@ -72,7 +72,7 @@ def suggest_diamond_orbit_parameters(
     v0 = 2 * np.pi * secular_freq * r0
     initial_velocity = (-v0 * np.sin(angle), v0 * np.cos(angle))
 
-    return OrbitParameters(
+    return StableOrbitParameters(
         voltage_amplitude=voltage,
         driving_frequency=driving_freq,
         initial_position=initial_position,
