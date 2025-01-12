@@ -65,12 +65,30 @@ class InitialConditionsConfig(BaseModel):
     voltage_amplitude: float | None = Field(
         default=None, description="Manual override for voltage amplitude (V)"
     )
-    initial_position: tuple[float, float] | None = Field(
-        default=None, description="Manual override for initial position (x,y) in meters"
+    initial_position_x: float | None = Field(
+        default=None, description="Manual override for initial x position (m). Must be overridden together with y"
     )
-    initial_velocity: tuple[float, float] | None = Field(
-        default=None, description="Manual override for initial velocity (vx,vy) in m/s"
+    initial_position_y: float | None = Field(
+        default=None, description="Manual override for initial y position (m). Must be overridden together with x"
     )
+    initial_velocity_x: float | None = Field(
+        default=None, description="Manual override for initial x velocity (m/s). Must be overridden together with y velocity"
+    )
+    initial_velocity_y: float | None = Field(
+        default=None, description="Manual override for initial y velocity (m/s). Must be overridden together with x velocity"
+    )
+
+    def get_position(self) -> tuple[float, float] | None:
+        """Get the initial position tuple if both components are set."""
+        if self.initial_position_x is not None and self.initial_position_y is not None:
+            return (self.initial_position_x, self.initial_position_y)
+        return None
+
+    def get_velocity(self) -> tuple[float, float] | None:
+        """Get the initial velocity tuple if both components are set."""
+        if self.initial_velocity_x is not None and self.initial_velocity_y is not None:
+            return (self.initial_velocity_x, self.initial_velocity_y)
+        return None
 
 
 # Default configurations

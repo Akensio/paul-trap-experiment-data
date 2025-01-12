@@ -33,9 +33,9 @@ def get_initial_parameters(
         voltage_amplitude=initial_conditions.voltage_amplitude
         or calculated.voltage_amplitude,
         driving_frequency=driving_freq,
-        initial_position=initial_conditions.initial_position
+        initial_position=initial_conditions.get_position()
         or calculated.initial_position,
-        initial_velocity=initial_conditions.initial_velocity
+        initial_velocity=initial_conditions.get_velocity()
         or calculated.initial_velocity,
         stability_q=calculated.stability_q,
         secular_frequency=calculated.secular_frequency,

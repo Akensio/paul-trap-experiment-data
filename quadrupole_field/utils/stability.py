@@ -54,9 +54,8 @@ def estimate_diamond_orbit_parameters(
     initial_position = (r0 * np.cos(angle), r0 * np.sin(angle))
 
     # Adjust velocity to match secular frequency
-    # v0 = 2 * np.pi * secular_freq * r0
-    # initial_velocity = (-v0 * np.sin(angle), v0 * np.cos(angle))
-    initial_velocity = (0, 0)
+    v0 = 2 * np.pi * secular_freq * r0
+    initial_velocity = (-v0 * np.sin(angle), v0 * np.cos(angle))
 
     return StableOrbitParameters(
         voltage_amplitude=voltage,
