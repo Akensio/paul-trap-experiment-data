@@ -1,21 +1,27 @@
+"""Main simulation runner."""
+
 from typing import List
 
 import numpy as np
 
-from quadrupole_field.config import SIMULATION_CONFIG
-from quadrupole_field.constants import (
+from quadrupole_field.simulation.config import (
+    PARTICLE_CONFIG,
+    SIMULATION_CONFIG,
+    TRAP_CONFIG,
+)
+from quadrupole_field.simulation.parameters import (
     DRIVING_FREQUENCY,
     PARTICLE_CHARGE,
     PARTICLE_MASS,
     ROD_DISTANCE,
 )
-from quadrupole_field.initialize import get_initial_parameters
-from quadrupole_field.orbit_parameters import OrbitParameters
-from quadrupole_field.plot import PaulTrapVisualizer
-from quadrupole_field.simulation import Simulation
+from quadrupole_field.simulation.simulation import Simulation
+from quadrupole_field.utils.initialization import get_initial_parameters
+from quadrupole_field.utils.stable_orbit_params import StableOrbitParameters
+from quadrupole_field.visualization.paul_trap_display import PaulTrapVisualizer
 
 # Get initial parameters with the new diamond orbit calculations
-params: OrbitParameters = get_initial_parameters()
+params: StableOrbitParameters = get_initial_parameters()
 
 
 def voltages_over_time(t: float) -> List[float]:
@@ -34,9 +40,9 @@ if __name__ == "__main__":
     print(f"Initial velocity: {params.initial_velocity}")
 
     simulation = Simulation(
-        a=ROD_DISTANCE,
-        charge=PARTICLE_CHARGE,
-        mass=PARTICLE_MASS,
+        a=TRAP_CONFIG.rod_distance,
+        charge=PARTICLE_CONFIG.charge,
+        mass=PARTICLE_CONFIG.mass,
         initial_position=params.initial_position,
         initial_velocity=params.initial_velocity,
         dt=SIMULATION_CONFIG.dt,
@@ -50,7 +56,7 @@ if __name__ == "__main__":
         positions=positions,
         velocities=velocities,
         voltages_history=voltages_history,
-        a=ROD_DISTANCE,
+        a=TRAP_CONFIG.rod_distance,
         trap=simulation.trap,
         dt=SIMULATION_CONFIG.dt,
     )

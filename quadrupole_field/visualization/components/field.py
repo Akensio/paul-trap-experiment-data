@@ -8,11 +8,24 @@ from matplotlib.colors import Normalize
 from matplotlib.quiver import Quiver
 from numpy.typing import NDArray
 
-from quadrupole_field.plot.plot_config import COLOR_CONFIG, PLOT_CONFIG
-from quadrupole_field.trap import Trap
+from quadrupole_field.core.trap import Trap
+from quadrupole_field.visualization.config import COLOR_CONFIG, PLOT_CONFIG
 
 
 class FieldVisualizer:
+    """Electric field visualization component."""
+    
+    ax: Axes
+    trap: Trap
+    a: float
+    X: NDArray[np.float64]
+    Y: NDArray[np.float64]
+    Ex: NDArray[np.float64]
+    Ey: NDArray[np.float64]
+    max_magnitude: float
+    quiver: Quiver
+    norm: Normalize
+
     def __init__(
         self, ax: Axes, trap: Trap, a: float, voltages_history: NDArray[np.float64]
     ) -> None:
@@ -25,8 +38,16 @@ class FieldVisualizer:
 
     def setup_field_grid(self) -> None:
         """Set up the grid for electric field visualization."""
-        x = np.linspace(-self.a * 1.5, self.a * 1.5, PLOT_CONFIG.field_resolution)
-        y = np.linspace(-self.a * 1.5, self.a * 1.5, PLOT_CONFIG.field_resolution)
+        x = np.linspace(
+            -self.a * PLOT_CONFIG.field_extent_factor,
+            self.a * PLOT_CONFIG.field_extent_factor,
+            PLOT_CONFIG.field_resolution,
+        )
+        y = np.linspace(
+            -self.a * PLOT_CONFIG.field_extent_factor,
+            self.a * PLOT_CONFIG.field_extent_factor,
+            PLOT_CONFIG.field_resolution,
+        )
         self.X, self.Y = np.meshgrid(x, y)
         self.Ex = np.zeros_like(self.X)
         self.Ey = np.zeros_like(self.Y)
@@ -43,9 +64,9 @@ class FieldVisualizer:
     def calculate_max_field(self, voltages_history: NDArray[np.float64]) -> None:
         """Calculate maximum field magnitude across all time steps."""
         self.max_magnitude = 0
-
-        # Sample a subset of time points for efficiency
-        sample_indices = np.linspace(0, len(voltages_history) - 1, 20, dtype=int)
+        sample_indices = np.linspace(
+            0, len(voltages_history) - 1, PLOT_CONFIG.field_sampling_points, dtype=int
+        )
 
         for t_idx in sample_indices:
             # Set voltages for this time step
@@ -68,7 +89,7 @@ class FieldVisualizer:
                 for rod in self.trap.rods:
                     dx = self.X[i, j] - rod.position[0]
                     dy = self.Y[i, j] - rod.position[1]
-                    R = np.sqrt(dx**2 + dy**2) + 1e-9
+                    R = np.sqrt(dx**2 + dy**2) + PLOT_CONFIG.min_distance_threshold
                     potential += rod.voltage / R
                 colors[i, j] = potential
         return colors
