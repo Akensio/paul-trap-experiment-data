@@ -42,16 +42,16 @@ class ParticleVisualizer:
             lw=PLOT_CONFIG.trajectory_line_width,
             label="Trajectory",
         )
-        self.velocity_arrow = self.ax.quiver(
-            [],
-            [],
-            [],
-            [],
-            color=COLOR_CONFIG.velocity_arrow_color,
-            scale=PLOT_CONFIG.velocity_arrow_scale,
-            width=PLOT_CONFIG.velocity_arrow_width,
-            label="Velocity Vector",
-        )
+        # self.velocity_arrow = self.ax.quiver(
+        #     [],
+        #     [],
+        #     [],
+        #     [],
+        #     color=COLOR_CONFIG.velocity_arrow_color,
+        #     scale=PLOT_CONFIG.velocity_arrow_scale,
+        #     width=PLOT_CONFIG.velocity_arrow_width,
+        #     label="Velocity Vector",
+        # )
         self.velocity_text = self.ax.text(
             PLOT_CONFIG.velocity_text_x,
             PLOT_CONFIG.velocity_text_y,
@@ -91,9 +91,9 @@ class ParticleVisualizer:
         velocity = np.linalg.norm(current_vel)
         self.velocity_text.set_text(f"Speed: {velocity:.2f} m/s")
 
-        if velocity > 0:
-            normalized_vel = (
-                current_vel / velocity * PLOT_CONFIG.velocity_arrow_size * a
-            )
-            self.velocity_arrow.set_offsets([current_pos[0], current_pos[1]])
-            self.velocity_arrow.set_UVC(normalized_vel[0], normalized_vel[1])
+        # if velocity > 0:
+        #     normalized_vel = (
+        #         current_vel / velocity * PLOT_CONFIG.velocity_arrow_size * a
+        #     )
+        #     self.velocity_arrow.set_offsets([current_pos[0], current_pos[1]])
+        #     self.velocity_arrow.set_UVC(normalized_vel[0], normalized_vel[1])
