@@ -11,7 +11,7 @@ from quadrupole_field.simulation.constants import (
 )
 from quadrupole_field.utils.initialization import get_initial_parameters
 from quadrupole_field.utils.orbit import OrbitParameters
-from quadrupole_field.visualization.visualizer import PaulTrapVisualizer
+from quadrupole_field.visualization.paul_trap_display import PaulTrapVisualizer
 from quadrupole_field.simulation.simulation import Simulation
 
 # Get initial parameters with the new diamond orbit calculations
