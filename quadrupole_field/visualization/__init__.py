@@ -1,1 +1,1 @@
-"""Visualization components of the quadrupole trap.""" 
+"""Visualization components of the quadrupole trap."""

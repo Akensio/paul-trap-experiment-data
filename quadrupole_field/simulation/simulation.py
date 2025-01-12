@@ -1,11 +1,14 @@
 """Main simulation logic."""
+
 from typing import Callable, List, Tuple
+
 import numpy as np
 from numpy.typing import NDArray
 
-from quadrupole_field.simulation.config import SIMULATION_CONFIG
 from quadrupole_field.core.particle import Particle
 from quadrupole_field.core.trap import Trap
+from quadrupole_field.simulation.config import SIMULATION_CONFIG
+
 
 class Simulation:
     def __init__(
@@ -52,4 +55,4 @@ class Simulation:
             velocities.append(self.particle.velocity.copy())
             voltages_history.append(voltages.copy())
 
-        return np.array(positions), np.array(velocities), np.array(voltages_history) 
+        return np.array(positions), np.array(velocities), np.array(voltages_history)

@@ -1,1 +1,1 @@
-"""Simulation components of the quadrupole trap.""" 
+"""Simulation components of the quadrupole trap."""

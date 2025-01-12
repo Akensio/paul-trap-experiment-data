@@ -21,21 +21,21 @@ def estimate_stable_orbit(
 ) -> Tuple[float, float, float]:
     """
     Calculate the Mathieu equation parameters and resulting secular frequency.
-    
+
     The Mathieu parameters determine the stability of particle motion in a Paul trap:
     - a: DC stability parameter (0 for pure AC operation)
     - q: AC stability parameter (stable trapping typically requires |q| < 0.908)
     - secular_freq: Resulting frequency of the particle's slow oscillation
-    
+
     For diamond-shaped orbits, q ≈ 0.3-0.4 gives good results.
-    
+
     Args:
         voltage_amplitude: Peak RF voltage amplitude (V)
         driving_frequency: RF driving frequency (Hz)
         rod_distance: Distance from trap center to rods (m)
         charge: Particle charge (C)
         mass: Particle mass (kg)
-    
+
     Returns:
         Tuple of (a, q, secular_freq)
     """
@@ -55,20 +55,20 @@ def estimate_diamond_orbit_parameters(
 ) -> StableOrbitParameters:
     """
     Estimate parameters for a stable diamond-shaped orbit in a Paul trap.
-    
+
     This function calculates parameters that produce a diamond-shaped orbit, which is
     a characteristic stable motion pattern in Paul traps. The calculation:
     1. Sets q = 0.3 for optimal stability (well within q < 0.908 stability region)
     2. Calculates required voltage based on trap and particle properties
     3. Positions particle at 45° with 8% of rod distance for clear visualization
     4. Sets velocity perpendicular to position for circular secular motion
-    
+
     Args:
         rod_distance: Distance from trap center to rods (m)
         particle_charge: Charge of the particle (C)
         particle_mass: Mass of the particle (kg)
         driving_freq: RF driving frequency (Hz)
-    
+
     Returns:
         StableOrbitParameters containing voltage, position, velocity, and stability info
     """
@@ -111,8 +111,8 @@ if __name__ == "__main__":
     """
     # Example usage with unit values
     params = estimate_diamond_orbit_parameters(
-        rod_distance=1.0, 
-        particle_charge=1.0, 
+        rod_distance=1.0,
+        particle_charge=1.0,
         particle_mass=1.0,
         driving_freq=5.0,
     )

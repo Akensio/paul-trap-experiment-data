@@ -1,1 +1,1 @@
-"""Core physics components of the quadrupole trap.""" 
+"""Core physics components of the quadrupole trap."""

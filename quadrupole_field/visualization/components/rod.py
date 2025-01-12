@@ -7,8 +7,8 @@ from matplotlib.axes import Axes
 from matplotlib.colors import Normalize
 from numpy.typing import NDArray
 
-from quadrupole_field.visualization.config import COLOR_CONFIG, PLOT_CONFIG
 from quadrupole_field.core.trap import Trap
+from quadrupole_field.visualization.config import COLOR_CONFIG, PLOT_CONFIG
 
 
 class RodVisualizer:

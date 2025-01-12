@@ -8,8 +8,8 @@ from matplotlib.colors import Normalize
 from matplotlib.quiver import Quiver
 from numpy.typing import NDArray
 
-from quadrupole_field.visualization.config import COLOR_CONFIG, PLOT_CONFIG
 from quadrupole_field.core.trap import Trap
+from quadrupole_field.visualization.config import COLOR_CONFIG, PLOT_CONFIG
 
 
 class FieldVisualizer:
@@ -28,12 +28,12 @@ class FieldVisualizer:
         x = np.linspace(
             -self.a * PLOT_CONFIG.field_extent_factor,
             self.a * PLOT_CONFIG.field_extent_factor,
-            PLOT_CONFIG.field_resolution
+            PLOT_CONFIG.field_resolution,
         )
         y = np.linspace(
             -self.a * PLOT_CONFIG.field_extent_factor,
             self.a * PLOT_CONFIG.field_extent_factor,
-            PLOT_CONFIG.field_resolution
+            PLOT_CONFIG.field_resolution,
         )
         self.X, self.Y = np.meshgrid(x, y)
         self.Ex = np.zeros_like(self.X)
@@ -52,10 +52,7 @@ class FieldVisualizer:
         """Calculate maximum field magnitude across all time steps."""
         self.max_magnitude = 0
         sample_indices = np.linspace(
-            0,
-            len(voltages_history) - 1,
-            PLOT_CONFIG.field_sampling_points,
-            dtype=int
+            0, len(voltages_history) - 1, PLOT_CONFIG.field_sampling_points, dtype=int
         )
 
         for t_idx in sample_indices:

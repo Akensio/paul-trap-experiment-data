@@ -1,1 +1,1 @@
-"""Individual visualization components.""" 
+"""Individual visualization components."""

@@ -7,11 +7,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 from numpy.typing import NDArray
 
+from quadrupole_field.core.trap import Trap
 from quadrupole_field.visualization.components.field import FieldVisualizer
 from quadrupole_field.visualization.components.particle import ParticleVisualizer
-from quadrupole_field.visualization.config import COLOR_CONFIG, PLOT_CONFIG
 from quadrupole_field.visualization.components.rod import RodVisualizer
-from quadrupole_field.core.trap import Trap
+from quadrupole_field.visualization.config import COLOR_CONFIG, PLOT_CONFIG
 
 
 class PaulTrapVisualizer:

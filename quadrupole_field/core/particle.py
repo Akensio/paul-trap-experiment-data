@@ -1,8 +1,12 @@
 """Particle physics component."""
+
 from typing import Tuple
+
 import numpy as np
 from numpy.typing import NDArray
+
 from quadrupole_field.core.physical_constants import ELEMENTARY_CHARGE
+
 
 class Particle:
     def __init__(
@@ -26,4 +30,4 @@ class Particle:
         for _ in range(4):
             acceleration = self.q * np.array([Ex, Ey]) / self.m
             self.velocity += acceleration * dt_small
-            self.position += self.velocity * dt_small 
+            self.position += self.velocity * dt_small

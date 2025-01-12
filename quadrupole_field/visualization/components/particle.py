@@ -54,7 +54,7 @@ class ParticleVisualizer:
             bbox=dict(
                 facecolor=COLOR_CONFIG.velocity_text_box_color,
                 alpha=COLOR_CONFIG.velocity_text_box_alpha,
-                edgecolor="none"
+                edgecolor="none",
             ),
         )
 
