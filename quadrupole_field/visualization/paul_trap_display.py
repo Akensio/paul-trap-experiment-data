@@ -1,10 +1,12 @@
 """Main visualization coordinator."""
+
 from typing import Any, List, Tuple
+
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
-from matplotlib.figure import Figure
-from matplotlib.axes import Axes
 import numpy as np
+from matplotlib.axes import Axes
+from matplotlib.figure import Figure
 from numpy.typing import NDArray
 
 from quadrupole_field.core.trap import Trap
@@ -16,21 +18,21 @@ from quadrupole_field.visualization.config import COLOR_CONFIG, PLOT_CONFIG
 
 class PaulTrapVisualizer:
     """Main visualization coordinator for the Paul trap simulation."""
-    
+
     # Data arrays
     positions: NDArray[np.float64]
     velocities: NDArray[np.float64]
     voltages_history: NDArray[np.float64]
-    
+
     # Physical parameters
     a: float
     dt: float
     trap: Trap
-    
+
     # Matplotlib objects
     fig: Figure
     ax: Axes
-    
+
     # Visualization components
     field_vis: FieldVisualizer
     particle_vis: ParticleVisualizer
@@ -52,7 +54,7 @@ class PaulTrapVisualizer:
         self.a = a
         self.trap = trap
         self.dt = dt
-        
+
         self.setup_figure()
         self.setup_visualizers()
 
@@ -71,7 +73,9 @@ class PaulTrapVisualizer:
 
     def setup_visualizers(self) -> None:
         """Setup the visualization components."""
-        self.field_vis = FieldVisualizer(self.ax, self.trap, self.a, self.voltages_history)
+        self.field_vis = FieldVisualizer(
+            self.ax, self.trap, self.a, self.voltages_history
+        )
         self.particle_vis = ParticleVisualizer(self.ax)
         self.rod_vis = RodVisualizer(self.ax, self.trap)
 

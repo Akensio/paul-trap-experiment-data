@@ -4,8 +4,8 @@ from typing import Any
 
 import numpy as np
 from matplotlib.axes import Axes
-from matplotlib.colors import Normalize
 from matplotlib.collections import PathCollection
+from matplotlib.colors import Normalize
 from numpy.typing import NDArray
 
 from quadrupole_field.core.trap import Trap
@@ -14,7 +14,7 @@ from quadrupole_field.visualization.config import COLOR_CONFIG, PLOT_CONFIG
 
 class RodVisualizer:
     """Rod visualization component."""
-    
+
     ax: Axes
     trap: Trap
     rod_dots: PathCollection

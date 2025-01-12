@@ -13,7 +13,7 @@ from quadrupole_field.visualization.config import COLOR_CONFIG, PLOT_CONFIG
 
 class ParticleVisualizer:
     """Particle trajectory visualization component."""
-    
+
     ax: Axes
     particle_dot: Line2D
     trajectory_line: Line2D

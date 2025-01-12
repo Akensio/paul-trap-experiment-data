@@ -12,10 +12,11 @@ from numpy.typing import NDArray
 
 class Rod:
     """A single electrode rod in the Paul trap.
-    
+
     The rod is modeled as a point charge for field calculations, with its
     contribution to the electric field falling off as 1/r from its position.
     """
+
     position: NDArray[np.float64]
     voltage: float
 

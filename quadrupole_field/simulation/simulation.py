@@ -12,7 +12,7 @@ from quadrupole_field.simulation.config import SIMULATION_CONFIG
 
 class Simulation:
     """Main simulation coordinator."""
-    
+
     trap: Trap
     particle: Particle
     dt: float

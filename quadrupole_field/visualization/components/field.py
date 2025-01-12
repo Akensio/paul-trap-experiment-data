@@ -14,7 +14,7 @@ from quadrupole_field.visualization.config import COLOR_CONFIG, PLOT_CONFIG
 
 class FieldVisualizer:
     """Electric field visualization component."""
-    
+
     ax: Axes
     trap: Trap
     a: float

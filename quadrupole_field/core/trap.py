@@ -2,7 +2,6 @@ from typing import List, Tuple
 
 from quadrupole_field.core.rod import Rod
 
-
 """Core trap physics implementation.
 
 This module implements the quadrupole Paul trap geometry and field calculations.
@@ -13,13 +12,13 @@ time-varying voltages creating the trapping field.
 
 class Trap:
     """Quadrupole Paul trap implementation.
-    
+
     The trap consists of four rods arranged in a square pattern:
     - Two rods on the x-axis at ±a
     - Two rods on the y-axis at ±a
     where 'a' is the distance from the center to each rod.
     """
-    
+
     rods: List[Rod]
 
     def __init__(self, a: float) -> None:

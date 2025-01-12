@@ -14,18 +14,19 @@ from quadrupole_field.core.physical_constants import ELEMENTARY_CHARGE
 
 class Particle:
     """A charged particle in electromagnetic fields.
-    
+
     The particle's motion is determined by:
     - Charge and mass (defining its response to fields)
     - Position and velocity (defining its state)
     - Electric fields (providing the forces)
-    
+
     Motion is integrated using a 4th-order symplectic algorithm for accuracy.
     """
+
     # Physical properties
     q: float  # Charge
     m: float  # Mass
-    
+
     # Dynamic state
     position: NDArray[np.float64]  # Current position (x, y)
     velocity: NDArray[np.float64]  # Current velocity (vx, vy)
@@ -45,7 +46,7 @@ class Particle:
 
     def update(self, electric_field: Tuple[float, float], dt: float) -> None:
         """Update particle's position and velocity using smaller timesteps.
-        
+
         Args:
             electric_field: Electric field vector (Ex, Ey) at particle position
             dt: Time step for the update
