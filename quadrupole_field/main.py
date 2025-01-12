@@ -9,12 +9,6 @@ from quadrupole_field.simulation.config import (
     SIMULATION_CONFIG,
     TRAP_CONFIG,
 )
-from quadrupole_field.simulation.parameters import (
-    DRIVING_FREQUENCY,
-    PARTICLE_CHARGE,
-    PARTICLE_MASS,
-    ROD_DISTANCE,
-)
 from quadrupole_field.simulation.simulation import Simulation
 from quadrupole_field.utils.initialization import get_initial_parameters
 from quadrupole_field.utils.stable_orbit_params import StableOrbitParameters
