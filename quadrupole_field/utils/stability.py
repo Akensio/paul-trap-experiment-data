@@ -4,7 +4,7 @@ from typing import Tuple
 
 import numpy as np
 
-from quadrupole_field.orbit_parameters import OrbitParameters
+from quadrupole_field.utils.orbit import OrbitParameters
 
 
 def calculate_secular_frequency(q: float, driving_freq: float) -> float:

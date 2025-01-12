@@ -7,7 +7,7 @@ from matplotlib.axes import Axes
 from matplotlib.lines import Line2D
 from numpy.typing import NDArray
 
-from quadrupole_field.plot.plot_config import COLOR_CONFIG, PLOT_CONFIG
+from quadrupole_field.visualization.config import COLOR_CONFIG, PLOT_CONFIG
 
 
 class ParticleVisualizer:
