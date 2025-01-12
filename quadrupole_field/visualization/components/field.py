@@ -27,13 +27,13 @@ class FieldVisualizer:
     norm: Normalize
 
     def __init__(
-        self, ax: Axes, trap: Trap, a: float, voltages_history: NDArray[np.float64]
+        self, ax: Axes, trap: Trap, a: float, max_field_magnitude: float
     ) -> None:
         self.ax = ax
         self.trap = trap
         self.a = a
+        self.max_magnitude = max_field_magnitude
         self.setup_field_grid()
-        self.calculate_max_field(voltages_history)
         self.setup_field_plot()
 
     def setup_field_grid(self) -> None:
@@ -61,37 +61,19 @@ class FieldVisualizer:
             Ey = Ey / self.max_magnitude
         return Ex, Ey
 
-    def calculate_max_field(self, voltages_history: NDArray[np.float64]) -> None:
-        """Calculate maximum field magnitude across all time steps."""
-        self.max_magnitude = 0
-        sample_indices = np.linspace(
-            0, len(voltages_history) - 1, PLOT_CONFIG.field_sampling_points, dtype=int
-        )
-
-        for t_idx in sample_indices:
-            # Set voltages for this time step
-            self.trap.set_voltages(voltages_history[t_idx])
-
-            # Calculate field at each point
-            for i in range(len(self.X)):
-                for j in range(len(self.Y)):
-                    Ex, Ey = self.trap.electric_field_at(self.X[i, j], self.Y[i, j])
-                    magnitude = np.sqrt(Ex**2 + Ey**2)
-                    if np.isfinite(magnitude):
-                        self.max_magnitude = max(self.max_magnitude, magnitude)
-
     def calculate_field_colors(self) -> NDArray[np.float64]:
-        """Calculate colors based on electric potential."""
+        """Calculate the electric potential at each point in the field grid."""
         colors = np.zeros_like(self.Ex)
         for i in range(len(self.X)):
             for j in range(len(self.Y)):
-                potential = 0
-                for rod in self.trap.rods:
-                    dx = self.X[i, j] - rod.position[0]
-                    dy = self.Y[i, j] - rod.position[1]
-                    R = np.sqrt(dx**2 + dy**2) + PLOT_CONFIG.min_distance_threshold
-                    potential += rod.voltage / R
-                colors[i, j] = potential
+                colors[i, j] = sum(
+                    rod.electric_potential_at(
+                        self.X[i, j], 
+                        self.Y[i, j], 
+                        PLOT_CONFIG.min_distance_threshold
+                    )
+                    for rod in self.trap.rods
+                )
         return colors
 
     def setup_field_plot(self) -> None:

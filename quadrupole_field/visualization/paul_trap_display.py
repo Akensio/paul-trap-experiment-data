@@ -3,13 +3,14 @@
 from typing import Any, List
 
 import matplotlib.pyplot as plt
-import numpy as np
-from matplotlib.animation import FuncAnimation
+from matplotlib.animation import FuncAnimation, FFMpegWriter
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
+import numpy as np
 from numpy.typing import NDArray
 
 from quadrupole_field.core.trap import Trap
+from quadrupole_field.utils.field_analysis import calculate_max_field_magnitude
 from quadrupole_field.visualization.components.field import FieldVisualizer
 from quadrupole_field.visualization.components.particle import ParticleVisualizer
 from quadrupole_field.visualization.components.rod import RodVisualizer
@@ -73,8 +74,14 @@ class PaulTrapVisualizer:
 
     def setup_visualizers(self) -> None:
         """Setup the visualization components."""
+        # Calculate maximum field magnitude for normalization
+        max_field = calculate_max_field_magnitude(
+            self.trap, self.voltages_history, self.a
+        )
+
+        # Initialize visualization components
         self.field_vis = FieldVisualizer(
-            self.ax, self.trap, self.a, self.voltages_history
+            self.ax, self.trap, self.a, max_field
         )
         self.particle_vis = ParticleVisualizer(self.ax)
         self.rod_vis = RodVisualizer(self.ax, self.trap)
@@ -110,7 +117,7 @@ class PaulTrapVisualizer:
         )
 
         if save_video:
-            writer = animation.FFMpegWriter(
+            writer = FFMpegWriter(
                 fps=PLOT_CONFIG.animation_fps,
                 metadata=dict(artist=PLOT_CONFIG.animation_metadata_artist),
                 bitrate=PLOT_CONFIG.animation_bitrate,
