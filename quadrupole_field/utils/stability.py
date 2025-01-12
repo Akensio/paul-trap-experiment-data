@@ -15,6 +15,7 @@ def estimate_diamond_orbit_parameters(
     particle_charge: float,
     particle_mass: float,
     driving_freq: float,
+    target_q: float,
 ) -> StableOrbitParameters:
     """
     Estimate parameters for a stable diamond-shaped orbit in a Paul trap.
@@ -31,12 +32,11 @@ def estimate_diamond_orbit_parameters(
         particle_charge: Charge of the particle (C)
         particle_mass: Mass of the particle (kg)
         driving_freq: RF driving frequency (Hz)
+        target_q: Target stability parameter (0 < q < 0.908)
 
     Returns:
         StableOrbitParameters containing voltage, position, velocity, and stability info
     """
-    # Keep the same q for stability
-    target_q = 0.4  # Smaller q ensures stability within Mathieu's stability region
     omega = 2 * np.pi * driving_freq
 
     # Calculate required voltage for stable operation

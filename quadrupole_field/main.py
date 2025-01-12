@@ -21,6 +21,7 @@ def main() -> None:
         particle_charge=particle_config.charge,
         particle_mass=particle_config.mass,
         driving_freq=trap_config.driving_frequency,
+        target_q=trap_config.target_q,
         initial_conditions=initial_config,
     )
 
@@ -30,6 +31,12 @@ def main() -> None:
             2 * np.pi * params.driving_frequency * t
         )
         return [voltage, voltage, -voltage, -voltage]
+
+    # Print simulation parameters
+    print(f"\nSimulation parameters:")
+    print(f"SimulationConfig: {sim_config.model_dump_json(indent=2)}")
+    print(f"TrapConfig: {trap_config.model_dump_json(indent=2)}")
+    print(f"ParticleConfig: {particle_config.model_dump_json(indent=2)}")
 
     # Print initial conditions
     print(f"\nInitial conditions:")

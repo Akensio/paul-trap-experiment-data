@@ -33,6 +33,12 @@ class TrapConfig(BaseModel):
     driving_frequency: float = Field(
         default=5.0, description="RF frequency in Hz", gt=0
     )
+    target_q: float = Field(
+        default=0.4, 
+        description="Target stability parameter (0 < q < 0.908)", 
+        gt=0, 
+        lt=0.908
+    )
 
 
 class ParticleConfig(BaseModel):
@@ -89,8 +95,3 @@ class InitialConditionsConfig(BaseModel):
         if self.initial_velocity_x is not None and self.initial_velocity_y is not None:
             return (self.initial_velocity_x, self.initial_velocity_y)
         return None
-
-
-# Default configurations
-DEFAULT_TRAP_CONFIG = TrapConfig()
-DEFAULT_PARTICLE_CONFIG = ParticleConfig()

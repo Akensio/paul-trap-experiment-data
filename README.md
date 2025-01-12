@@ -104,6 +104,7 @@ Available parameters:
 - Trap configuration:
   - `--rod_distance`: Distance from center to rods in meters (default: 1.0)
   - `--driving_frequency`: RF frequency in Hz (default: 5.0)
+  - `--target_q`: Target stability parameter (default: 0.4, must be between 0 and 0.908)
 - Particle properties:
   - `--charge`: Particle charge in Coulombs (default: 1.0)
   - `--mass`: Particle mass in kilograms (default: 1.0)
