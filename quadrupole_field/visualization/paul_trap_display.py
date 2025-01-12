@@ -81,7 +81,9 @@ class PaulTrapVisualizer:
 
         if save_video:
             writer = animation.FFMpegWriter(
-                fps=30, metadata=dict(artist="Paul Trap Simulation"), bitrate=2000
+                fps=PLOT_CONFIG.animation_fps,
+                metadata=dict(artist=PLOT_CONFIG.animation_metadata_artist),
+                bitrate=PLOT_CONFIG.animation_bitrate,
             )
             anim.save(filename, writer=writer)
             print(f"Video saved as {filename}")

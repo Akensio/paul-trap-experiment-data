@@ -23,7 +23,7 @@ class ParticleVisualizer:
             "o",
             color=COLOR_CONFIG.particle_color,
             label="Particle",
-            markersize=8,
+            markersize=PLOT_CONFIG.particle_marker_size,
         )
         (self.trajectory_line,) = self.ax.plot(
             [],
@@ -44,13 +44,18 @@ class ParticleVisualizer:
             label="Velocity Vector",
         )
         self.velocity_text = self.ax.text(
-            0.02,
-            0.98,
+            PLOT_CONFIG.velocity_text_x,
+            PLOT_CONFIG.velocity_text_y,
             "",
             transform=self.ax.transAxes,
             verticalalignment="top",
-            fontsize=10,
-            bbox=dict(facecolor="white", alpha=0.7, edgecolor="none"),
+            fontsize=PLOT_CONFIG.velocity_text_size,
+            color=COLOR_CONFIG.velocity_text_color,
+            bbox=dict(
+                facecolor=COLOR_CONFIG.velocity_text_box_color,
+                alpha=COLOR_CONFIG.velocity_text_box_alpha,
+                edgecolor="none"
+            ),
         )
 
     def update(
