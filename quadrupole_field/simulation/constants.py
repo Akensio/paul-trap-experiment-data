@@ -11,4 +11,4 @@ DRIVING_FREQUENCY: float = 5.0  # Hz (balanced for good stability)
 
 # Particle parameters
 PARTICLE_CHARGE: float = 1.0  # Coulomb
-PARTICLE_MASS: float = 1.0  # kg
+PARTICLE_MASS: float = 1.0  # kg 

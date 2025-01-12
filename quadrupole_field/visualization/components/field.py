@@ -9,7 +9,7 @@ from matplotlib.quiver import Quiver
 from numpy.typing import NDArray
 
 from quadrupole_field.plot.plot_config import COLOR_CONFIG, PLOT_CONFIG
-from quadrupole_field.trap import Trap
+from quadrupole_field.core.trap import Trap
 
 
 class FieldVisualizer:

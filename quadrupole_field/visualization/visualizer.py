@@ -11,7 +11,7 @@ from quadrupole_field.plot.field_visualizer import FieldVisualizer
 from quadrupole_field.plot.particle_visualizer import ParticleVisualizer
 from quadrupole_field.plot.plot_config import COLOR_CONFIG, PLOT_CONFIG
 from quadrupole_field.plot.rod_visualizer import RodVisualizer
-from quadrupole_field.trap import Trap
+from quadrupole_field.core.trap import Trap
 
 
 class PaulTrapVisualizer:

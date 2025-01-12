@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-from quadrupole_field.rod import Rod
+from quadrupole_field.core.rod import Rod
 
 
 class Trap:

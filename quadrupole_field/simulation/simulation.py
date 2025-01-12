@@ -1,12 +1,11 @@
+"""Main simulation logic."""
 from typing import Callable, List, Tuple
-
 import numpy as np
 from numpy.typing import NDArray
 
-from quadrupole_field.config import SIMULATION_CONFIG
-from quadrupole_field.particle import Particle
-from quadrupole_field.trap import Trap
-
+from quadrupole_field.simulation.config import SIMULATION_CONFIG
+from quadrupole_field.core.particle import Particle
+from quadrupole_field.core.trap import Trap
 
 class Simulation:
     def __init__(
@@ -18,9 +17,7 @@ class Simulation:
         initial_velocity: Tuple[float, float],
         dt: float,
     ) -> None:
-        """
-        Initialize the simulation with the trap and particle.
-        """
+        """Initialize the simulation with the trap and particle."""
         self.trap: Trap = Trap(a)
         self.particle: Particle = Particle(
             charge, mass, initial_position, initial_velocity
@@ -55,4 +52,4 @@ class Simulation:
             velocities.append(self.particle.velocity.copy())
             voltages_history.append(voltages.copy())
 
-        return np.array(positions), np.array(velocities), np.array(voltages_history)
+        return np.array(positions), np.array(velocities), np.array(voltages_history) 
