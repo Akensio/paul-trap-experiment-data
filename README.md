@@ -1,6 +1,6 @@
 # Paul Trap Experiment Data Analysis
 
-Analysis of experimental measurements from a Paul trap setup, including particle charge and mass calculations, plus simulations of particle dynamics.
+Analysis of experimental measurements from a Paul trap setup, including particle charge and mass calculations, plus simulations of particle dynamics. The simulations don't really work, but they're a good educational project.
 
 ## Overview
 
@@ -26,18 +26,20 @@ paul_trap_experiment_data_analysis/
 
 ## Setup and Installation
 
-1. Install Poetry (dependency management):
+1. Ensure you have Python 3.12+ installed
+
+2. Install Poetry (dependency management):
 
 ```bash
 curl -sSL https://install.python-poetry.org | python3 -
 ```
 
-2. Install dependencies:
+3. Install dependencies:
 ```bash
 poetry install
 ```
 
-3. Activate virtual environment:
+4. Activate virtual environment:
 ```bash
 poetry shell
 ```
@@ -63,6 +65,7 @@ The simulation models a Paul trap with:
 ### Experimental Analysis
 
 ```bash
+cd paul_trap_experiment_data_analysis
 jupyter notebook paultrap.ipynb
 ```
 
