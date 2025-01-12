@@ -1,13 +1,11 @@
-from typing import List, Tuple
-
-from quadrupole_field.core.rod import Rod
-
 """Core trap physics implementation.
 
 This module implements the quadrupole Paul trap geometry and field calculations.
 The trap consists of four rods arranged in a square configuration, with
 time-varying voltages creating the trapping field.
 """
+
+from quadrupole_field.core.rod import Rod
 
 
 class Trap:
@@ -19,13 +17,13 @@ class Trap:
     where 'a' is the distance from the center to each rod.
     """
 
-    rods: List[Rod]
+    rods: list[Rod]
 
     def __init__(self, a: float) -> None:
         """Initialize the trap with four rods."""
         self.rods = [Rod((a, 0)), Rod((-a, 0)), Rod((0, a)), Rod((0, -a))]
 
-    def set_voltages(self, voltages: List[float]) -> None:
+    def set_voltages(self, voltages: list[float]) -> None:
         """
         Set voltages for all rods.
         :param voltages: List of 4 voltage values, one for each rod.
@@ -35,7 +33,7 @@ class Trap:
         for rod, voltage in zip(self.rods, voltages):
             rod.set_voltage(voltage)
 
-    def electric_field_at(self, x: float, y: float) -> Tuple[float, float]:
+    def electric_field_at(self, x: float, y: float) -> tuple[float, float]:
         """
         Calculate the total electric field at a point (x, y) due to all rods.
         :param x: X-coordinate of the point.

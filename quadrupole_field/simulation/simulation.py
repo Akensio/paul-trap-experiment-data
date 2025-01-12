@@ -1,6 +1,6 @@
 """Main simulation logic."""
 
-from typing import Callable, List, Tuple
+from typing import Callable
 
 import numpy as np
 from numpy.typing import NDArray
@@ -21,8 +21,8 @@ class Simulation:
         a: float,
         charge: float,
         mass: float,
-        initial_position: Tuple[float, float],
-        initial_velocity: Tuple[float, float],
+        initial_position: tuple[float, float],
+        initial_velocity: tuple[float, float],
         dt: float,
     ) -> None:
         """Initialize the simulation with the trap and particle."""
@@ -31,17 +31,17 @@ class Simulation:
         self.dt = dt
 
     def run(
-        self, voltages_over_time: Callable[[float], List[float]], total_time: float
-    ) -> Tuple[NDArray[np.float64], NDArray[np.float64], NDArray[np.float64]]:
+        self, voltages_over_time: Callable[[float], list[float]], total_time: float
+    ) -> tuple[NDArray[np.float64], NDArray[np.float64], NDArray[np.float64]]:
         """
         Run the simulation.
         :param voltages_over_time: Function providing voltages at a given time.
         :param total_time: Total simulation time.
         :return: Tuple of (positions, velocities, voltages) over time.
         """
-        positions: List[NDArray[np.float64]] = []
-        velocities: List[NDArray[np.float64]] = []
-        voltages_history: List[List[float]] = []
+        positions: list[NDArray[np.float64]] = []
+        velocities: list[NDArray[np.float64]] = []
+        voltages_history: list[list[float]] = []
         time_steps: int = int(total_time / self.dt)
 
         for t in range(time_steps):

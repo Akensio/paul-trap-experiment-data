@@ -1,7 +1,5 @@
 """Main simulation runner."""
 
-from typing import List
-
 import numpy as np
 
 from quadrupole_field.simulation.simulation import Simulation
@@ -26,7 +24,7 @@ def main() -> None:
         initial_conditions=initial_config,
     )
 
-    def voltages_over_time(t: float) -> List[float]:
+    def voltages_over_time(t: float) -> list[float]:
         """Calculate oscillating voltages for rods at time t."""
         voltage = params.voltage_amplitude * np.sin(
             2 * np.pi * params.driving_frequency * t

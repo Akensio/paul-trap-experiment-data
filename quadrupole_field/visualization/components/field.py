@@ -1,7 +1,5 @@
 """Electric field visualization component."""
 
-from typing import Any, Tuple
-
 import numpy as np
 from matplotlib.axes import Axes
 from matplotlib.colors import Normalize
@@ -54,7 +52,7 @@ class FieldVisualizer:
 
     def normalize_field(
         self, Ex: NDArray[np.float64], Ey: NDArray[np.float64]
-    ) -> Tuple[NDArray[np.float64], NDArray[np.float64]]:
+    ) -> tuple[NDArray[np.float64], NDArray[np.float64]]:
         """Normalize the electric field vectors."""
         if self.max_magnitude > 0:
             Ex = Ex / self.max_magnitude

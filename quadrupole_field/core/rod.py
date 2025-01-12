@@ -4,8 +4,6 @@ This module defines the Rod class, which represents a single electrode in the Pa
 Each rod contributes to the total electric field and can have its voltage varied over time.
 """
 
-from typing import Tuple
-
 import numpy as np
 from numpy.typing import NDArray
 
@@ -20,7 +18,7 @@ class Rod:
     position: NDArray[np.float64]
     voltage: float
 
-    def __init__(self, position: Tuple[float, float]) -> None:
+    def __init__(self, position: tuple[float, float]) -> None:
         """
         Initialize a rod.
         :param position: Tuple (x, y) representing the rod's position.
@@ -35,7 +33,7 @@ class Rod:
         """
         self.voltage = voltage
 
-    def electric_field_at(self, x: float, y: float) -> Tuple[float, float]:
+    def electric_field_at(self, x: float, y: float) -> tuple[float, float]:
         """
         Calculate the electric field contribution at a point (x, y).
         :param x: X-coordinate of the point.

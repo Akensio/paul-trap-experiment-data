@@ -1,7 +1,5 @@
 """Calculate stable orbit parameters for the Paul trap."""
 
-from typing import Tuple
-
 import numpy as np
 
 from quadrupole_field.utils.stable_orbit_params import StableOrbitParameters
@@ -18,7 +16,7 @@ def estimate_stable_orbit(
     rod_distance: float,
     charge: float,
     mass: float,
-) -> Tuple[float, float, float]:
+) -> tuple[float, float, float]:
     """
     Calculate the Mathieu equation parameters and resulting secular frequency.
 
@@ -37,7 +35,7 @@ def estimate_stable_orbit(
         mass: Particle mass (kg)
 
     Returns:
-        Tuple of (a, q, secular_freq)
+        tuple of (a, q, secular_freq)
     """
     omega = 2 * np.pi * driving_frequency
     q = 4 * charge * voltage_amplitude / (mass * omega**2 * rod_distance**2)
