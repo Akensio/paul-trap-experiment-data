@@ -1,51 +1,81 @@
-"""Configuration settings for the Paul trap simulation.
-
+"""Configuration settings for the Paul trap simulation using Pydantic.
 This module contains all configurable parameters for the simulation, organized into
 logical groups. Each parameter can be adjusted to explore different trap behaviors.
 """
 
-from dataclasses import dataclass
+
+from pydantic import BaseModel, Field
 
 
-@dataclass
-class SimulationConfig:
+class SimulationConfig(BaseModel):
     """Time-related configuration for the simulation.
-
+    
     Controls the temporal resolution and duration of the simulation. Smaller dt values
     provide more accurate results but increase computation time.
     """
+    dt: float = Field(
+        default=0.001,
+        description="Time step size in seconds",
+        gt=0
+    )
+    total_time: float = Field(
+        default=5.0,
+        description="Total simulation duration in seconds",
+        gt=0
+    )
 
-    dt: float = 0.001  # Time step size in seconds
-    total_time: float = 5.0  # Total simulation duration in seconds
 
-
-@dataclass
-class TrapConfig:
+class TrapConfig(BaseModel):
     """Physical configuration of the trap system.
-
+    
     Defines the fundamental trap parameters that determine its operation.
     The rod_distance and driving_frequency are key parameters that affect
     particle stability.
     """
+    rod_distance: float = Field(
+        default=1.0,
+        description="Distance from center to rods in meters",
+        gt=0
+    )
+    driving_frequency: float = Field(
+        default=5.0,
+        description="RF frequency in Hz",
+        gt=0
+    )
 
-    rod_distance: float = 1.0  # Distance from center to rods in meters
-    driving_frequency: float = 5.0  # RF frequency in Hz, affects stability
 
-
-@dataclass
-class ParticleConfig:
+class ParticleConfig(BaseModel):
     """Configuration of the simulated particle.
-
+    
     Defines the physical properties of the trapped particle. These values
     determine the particle's response to the electric field and its
     stability characteristics.
     """
+    charge: float = Field(
+        default=1.0,
+        description="Particle charge in Coulombs"
+    )
+    mass: float = Field(
+        default=1.0,
+        description="Particle mass in kilograms",
+        gt=0
+    )
 
-    charge: float = 1.0  # Particle charge in Coulombs
-    mass: float = 1.0  # Particle mass in kilograms
+
+class OutputConfig(BaseModel):
+    """Configuration for simulation output and visualization."""
+    save_video: bool = Field(
+        default=False,
+        description="Save animation as video file"
+    )
+    output_file: str = Field(
+        default="paul_trap_simulation.mp4",
+        description="Output video filename"
+    )
 
 
-# Create default configuration instances
-SIMULATION_CONFIG = SimulationConfig()
-TRAP_CONFIG = TrapConfig()
-PARTICLE_CONFIG = ParticleConfig()
+# Default configurations
+DEFAULT_SIMULATION_CONFIG = SimulationConfig()
+DEFAULT_TRAP_CONFIG = TrapConfig()
+DEFAULT_PARTICLE_CONFIG = ParticleConfig()
+DEFAULT_OUTPUT_CONFIG = OutputConfig()

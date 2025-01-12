@@ -1,12 +1,11 @@
-"""Main visualization coordinator."""
+"""Main visualization coordinator for the Paul trap simulation."""
+from typing import Any, List
 
-from typing import Any, List, Tuple
-
-import matplotlib.animation as animation
 import matplotlib.pyplot as plt
-import numpy as np
+from matplotlib.animation import FuncAnimation
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
+import numpy as np
 from numpy.typing import NDArray
 
 from quadrupole_field.core.trap import Trap
@@ -101,7 +100,7 @@ class PaulTrapVisualizer:
     ) -> None:
         """Create and display the animation."""
         # Create animation
-        anim = animation.FuncAnimation(
+        anim = FuncAnimation(
             self.fig,
             self.update_frame,
             frames=len(self.positions),

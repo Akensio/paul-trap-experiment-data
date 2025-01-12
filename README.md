@@ -71,8 +71,41 @@ jupyter notebook paultrap.ipynb
 
 ### Running Simulations
 
+Basic usage:
 ```bash
 python -m quadrupole_field.main
+```
+
+With custom parameters:
+```bash
+python -m quadrupole_field.main \
+--simulation.dt 0.0005 \
+--simulation.total_time 10.0 \
+--trap.rod_distance 0.5 \
+--trap.driving_frequency 10.0 \
+--particle.charge 1e-6 \
+--particle.mass 1e-9 \
+--output.save_video \
+--output.output_file "custom_simulation.mp4"
+```
+
+Available parameters:
+- Simulation settings:
+  - `--dt`: Time step size in seconds (default: 0.001)
+  - `--total_time`: Total simulation duration in seconds (default: 5.0)
+- Trap configuration:
+  - `--rod_distance`: Distance from center to rods in meters (default: 1.0)
+  - `--driving_frequency`: RF frequency in Hz (default: 5.0)
+- Particle properties:
+  - `--charge`: Particle charge in Coulombs (default: 1.0)
+  - `--mass`: Particle mass in kilograms (default: 1.0)
+- Output options:
+  - `--save_video`: Save animation to file (flag)
+  - `--output_file`: Output video filename (default: "paul_trap_simulation.mp4")
+
+To see all available options:
+```bash
+python -m quadrupole_field.main --help
 ```
 
 ## Configuration

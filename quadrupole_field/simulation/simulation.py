@@ -7,7 +7,6 @@ from numpy.typing import NDArray
 
 from quadrupole_field.core.particle import Particle
 from quadrupole_field.core.trap import Trap
-from quadrupole_field.simulation.config import SIMULATION_CONFIG
 
 
 class Simulation:
