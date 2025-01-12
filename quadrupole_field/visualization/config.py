@@ -1,6 +1,7 @@
 """Plot configuration settings."""
 
 from dataclasses import dataclass, field
+from typing import Tuple
 
 from matplotlib.colors import LinearSegmentedColormap
 
@@ -30,11 +31,12 @@ class PlotConfig:
 
 @dataclass
 class ColorConfig:
+    """Configuration for plot colors."""
     colormap: LinearSegmentedColormap = field(default_factory=create_electric_colormap)
-    voltage_range: tuple[float, float] = (-10, 10)
-    particle_color: str = "#1f77b4"
-    trajectory_color: str = "#1f77b4"
-    velocity_arrow_color: str = "#d62728"
+    voltage_range: Tuple[float, float] = (-10, 10)
+    particle_color: str = "black"
+    trajectory_color: str = "black"
+    velocity_arrow_color: str = "black"
     grid_color: str = "gray"
 
 
