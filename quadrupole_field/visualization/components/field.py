@@ -50,14 +50,14 @@ class FieldVisualizer:
         self.Ex = np.zeros_like(self.X)
         self.Ey = np.zeros_like(self.Y)
 
-    def normalize_field(
+    def scale_field(
         self, Ex: NDArray[np.float64], Ey: NDArray[np.float64]
     ) -> tuple[NDArray[np.float64], NDArray[np.float64]]:
-        """Normalize the electric field vectors."""
+        """Scale down the electric field vectors."""
         if self.max_magnitude > 0:
-            Ex = Ex / self.max_magnitude
-            Ey = Ey / self.max_magnitude
-        return Ex, Ey
+            scaled_Ex = Ex / self.max_magnitude
+            scaled_Ey = Ey / self.max_magnitude
+        return scaled_Ex, scaled_Ey
 
     def calculate_field_colors(self) -> NDArray[np.float64]:
         """Calculate the electric potential at each point in the field grid."""
@@ -82,7 +82,7 @@ class FieldVisualizer:
                 )
 
         # Normalize field vectors using the dedicated method
-        Ex_norm, Ey_norm = self.normalize_field(self.Ex, self.Ey)
+        Ex_norm, Ey_norm = self.scale_field(self.Ex, self.Ey)
 
         # Calculate colors based on potential
         colors = self.calculate_field_colors()
@@ -113,7 +113,7 @@ class FieldVisualizer:
                 )
 
         # Normalize field vectors using the dedicated method
-        Ex_norm, Ey_norm = self.normalize_field(self.Ex, self.Ey)
+        Ex_norm, Ey_norm = self.scale_field(self.Ex, self.Ey)
 
         # Update colors
         colors = self.calculate_field_colors()

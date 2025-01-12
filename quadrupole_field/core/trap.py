@@ -40,7 +40,7 @@ class Trap:
         :param y: Y-coordinate of the point.
         :return: Total electric field vector (Ex, Ey).
         """
-        Ex, Ey = 0, 0
+        Ex, Ey = 0.0, 0.0
         for rod in self.rods:
             Ex_rod, Ey_rod = rod.electric_field_at(x, y)
             Ex += Ex_rod

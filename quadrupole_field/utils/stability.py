@@ -65,25 +65,3 @@ def estimate_diamond_orbit_parameters(
         stability_q=target_q,
         secular_frequency=secular_freq,
     )
-
-
-if __name__ == "__main__":
-    """
-    TODO: This will be developed into a proper entry point for stability analysis.
-    For now, it serves as an example usage of the stability calculations.
-    """
-    # Example usage with unit values
-    params = estimate_diamond_orbit_parameters(
-        rod_distance=1.0,
-        particle_charge=1.0,
-        particle_mass=1.0,
-        driving_freq=5.0,
-    )
-
-    print("\nSuggested diamond orbit parameters:")
-    print(f"Voltage amplitude: {params.voltage_amplitude:.2f} V")
-    print(f"Driving frequency: {params.driving_frequency:.2f} Hz")
-    print(f"Initial position: {params.initial_position}")
-    print(f"Initial velocity: {params.initial_velocity}")
-    print(f"Stability parameter q: {params.stability_q:.3f}")
-    print(f"Secular frequency: {params.secular_frequency:.2f} Hz")
