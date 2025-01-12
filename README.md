@@ -108,11 +108,13 @@ Available parameters:
   - `--charge`: Particle charge in Coulombs (default: 1.0)
   - `--mass`: Particle mass in kilograms (default: 1.0)
 - Initial conditions (optional overrides):
-  - `--initial.voltage_amplitude`: Manual override for voltage amplitude in Volts
-  - `--initial.initial_position`: Manual override for initial position as "x,y" in meters
-  - `--initial.initial_velocity`: Manual override for initial velocity as "vx,vy" in m/s
+  - `--voltage_amplitude`: Manual override for voltage amplitude in Volts
+  - `--initial_position_x`: Manual override for initial x position in meters. Must be overridden alongside y.
+  - `--initial_position_y`: Manual override for initial y position in meters. Must be overridden alongside x.
+  - `--initial_velocity_x`: Manual override for initial velocity Vx in m/s. Must be overridden alongside Vy.
+  - `--initial_velocity_y`: Manual override for initial velocity Vy in m/s. Must be overridden alongside Vx.
 - Output options:
-  - `--save_video`: Save animation to file (flag)
+  - `--save_video`: Save animation to file (boolean)
   - `--output_file`: Output video filename (default: "paul_trap_simulation.mp4")
 
 Note: Initial conditions are automatically calculated for stable orbits if not manually specified.
