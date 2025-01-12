@@ -1,9 +1,9 @@
 """Main visualization coordinator."""
-
 from typing import Any, List, Tuple
-
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from matplotlib.axes import Axes
 import numpy as np
 from numpy.typing import NDArray
 
@@ -15,6 +15,27 @@ from quadrupole_field.visualization.config import COLOR_CONFIG, PLOT_CONFIG
 
 
 class PaulTrapVisualizer:
+    """Main visualization coordinator for the Paul trap simulation."""
+    
+    # Data arrays
+    positions: NDArray[np.float64]
+    velocities: NDArray[np.float64]
+    voltages_history: NDArray[np.float64]
+    
+    # Physical parameters
+    a: float
+    dt: float
+    trap: Trap
+    
+    # Matplotlib objects
+    fig: Figure
+    ax: Axes
+    
+    # Visualization components
+    field_vis: FieldVisualizer
+    particle_vis: ParticleVisualizer
+    rod_vis: RodVisualizer
+
     def __init__(
         self,
         positions: NDArray[np.float64],
@@ -29,10 +50,14 @@ class PaulTrapVisualizer:
         self.velocities = velocities
         self.voltages_history = voltages_history
         self.a = a
+        self.trap = trap
         self.dt = dt
-        self.trap = trap  # Store trap reference
+        
+        self.setup_figure()
+        self.setup_visualizers()
 
-        # Setup the plot
+    def setup_figure(self) -> None:
+        """Setup the plot."""
         self.fig, self.ax = plt.subplots(figsize=PLOT_CONFIG.figure_size)
         self.ax.set_aspect("equal")
         self.ax.grid(True, color=COLOR_CONFIG.grid_color)
@@ -44,10 +69,11 @@ class PaulTrapVisualizer:
         self.ax.set_xlabel("x (m)")
         self.ax.set_ylabel("y (m)")
 
-        # Initialize visualizer components
-        self.field_vis = FieldVisualizer(self.ax, trap, a, voltages_history)
+    def setup_visualizers(self) -> None:
+        """Setup the visualization components."""
+        self.field_vis = FieldVisualizer(self.ax, self.trap, self.a, self.voltages_history)
         self.particle_vis = ParticleVisualizer(self.ax)
-        self.rod_vis = RodVisualizer(self.ax, trap)
+        self.rod_vis = RodVisualizer(self.ax, self.trap)
 
     def update_frame(self, frame: int) -> List[Any]:
         """Update animation frame."""

@@ -16,14 +16,16 @@ class Rod:
     The rod is modeled as a point charge for field calculations, with its
     contribution to the electric field falling off as 1/r from its position.
     """
+    position: NDArray[np.float64]
+    voltage: float
 
     def __init__(self, position: Tuple[float, float]) -> None:
         """
         Initialize a rod.
         :param position: Tuple (x, y) representing the rod's position.
         """
-        self.position: NDArray[np.float64] = np.array(position, dtype=float)
-        self.voltage: float = 0  # Default voltage
+        self.position = np.array(position, dtype=float)
+        self.voltage = 0.0
 
     def set_voltage(self, voltage: float) -> None:
         """

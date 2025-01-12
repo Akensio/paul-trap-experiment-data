@@ -19,13 +19,12 @@ class Trap:
     - Two rods on the y-axis at ±a
     where 'a' is the distance from the center to each rod.
     """
+    
+    rods: List[Rod]
 
     def __init__(self, a: float) -> None:
-        """
-        Initialize the trap with four rods at (+a, 0), (-a, 0), (0, +a), (0, -a).
-        :param a: Distance from the origin to each rod.
-        """
-        self.rods: List[Rod] = [Rod((a, 0)), Rod((-a, 0)), Rod((0, a)), Rod((0, -a))]
+        """Initialize the trap with four rods."""
+        self.rods = [Rod((a, 0)), Rod((-a, 0)), Rod((0, a)), Rod((0, -a))]
 
     def set_voltages(self, voltages: List[float]) -> None:
         """

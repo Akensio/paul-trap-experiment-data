@@ -13,6 +13,19 @@ from quadrupole_field.visualization.config import COLOR_CONFIG, PLOT_CONFIG
 
 
 class FieldVisualizer:
+    """Electric field visualization component."""
+    
+    ax: Axes
+    trap: Trap
+    a: float
+    X: NDArray[np.float64]
+    Y: NDArray[np.float64]
+    Ex: NDArray[np.float64]
+    Ey: NDArray[np.float64]
+    max_magnitude: float
+    quiver: Quiver
+    norm: Normalize
+
     def __init__(
         self, ax: Axes, trap: Trap, a: float, voltages_history: NDArray[np.float64]
     ) -> None:

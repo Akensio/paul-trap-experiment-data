@@ -11,6 +11,12 @@ from quadrupole_field.simulation.config import SIMULATION_CONFIG
 
 
 class Simulation:
+    """Main simulation coordinator."""
+    
+    trap: Trap
+    particle: Particle
+    dt: float
+
     def __init__(
         self,
         a: float,
@@ -21,11 +27,9 @@ class Simulation:
         dt: float,
     ) -> None:
         """Initialize the simulation with the trap and particle."""
-        self.trap: Trap = Trap(a)
-        self.particle: Particle = Particle(
-            charge, mass, initial_position, initial_velocity
-        )
-        self.dt: float = dt
+        self.trap = Trap(a)
+        self.particle = Particle(charge, mass, initial_position, initial_velocity)
+        self.dt = dt
 
     def run(
         self, voltages_over_time: Callable[[float], List[float]], total_time: float

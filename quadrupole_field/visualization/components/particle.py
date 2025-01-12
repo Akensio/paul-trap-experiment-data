@@ -5,12 +5,21 @@ from typing import Any
 import numpy as np
 from matplotlib.axes import Axes
 from matplotlib.lines import Line2D
+from matplotlib.quiver import Quiver
 from numpy.typing import NDArray
 
 from quadrupole_field.visualization.config import COLOR_CONFIG, PLOT_CONFIG
 
 
 class ParticleVisualizer:
+    """Particle trajectory visualization component."""
+    
+    ax: Axes
+    particle_dot: Line2D
+    trajectory_line: Line2D
+    velocity_arrow: Quiver
+    velocity_text: Any  # matplotlib Text object
+
     def __init__(self, ax: Axes) -> None:
         self.ax = ax
         self.setup_particle_plots()

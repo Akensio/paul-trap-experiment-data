@@ -22,6 +22,13 @@ class Particle:
     
     Motion is integrated using a 4th-order symplectic algorithm for accuracy.
     """
+    # Physical properties
+    q: float  # Charge
+    m: float  # Mass
+    
+    # Dynamic state
+    position: NDArray[np.float64]  # Current position (x, y)
+    velocity: NDArray[np.float64]  # Current velocity (vx, vy)
 
     def __init__(
         self,
@@ -31,13 +38,18 @@ class Particle:
         velocity: Tuple[float, float],
     ) -> None:
         """Initialize the particle with its properties."""
-        self.q: float = charge
-        self.m: float = mass
-        self.position: NDArray[np.float64] = np.array(position, dtype=float)
-        self.velocity: NDArray[np.float64] = np.array(velocity, dtype=float)
+        self.q = charge
+        self.m = mass
+        self.position = np.array(position, dtype=float)
+        self.velocity = np.array(velocity, dtype=float)
 
     def update(self, electric_field: Tuple[float, float], dt: float) -> None:
-        """Update particle's position and velocity using smaller timesteps."""
+        """Update particle's position and velocity using smaller timesteps.
+        
+        Args:
+            electric_field: Electric field vector (Ex, Ey) at particle position
+            dt: Time step for the update
+        """
         Ex, Ey = electric_field
         # Split the timestep into 4 smaller steps for better accuracy
         dt_small = dt / 4
