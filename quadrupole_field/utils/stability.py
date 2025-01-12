@@ -10,41 +10,6 @@ def calculate_secular_frequency(q: float, driving_freq: float) -> float:
     return q * driving_freq / (2 * np.sqrt(2))
 
 
-def estimate_stable_orbit(
-    voltage_amplitude: float,
-    driving_frequency: float,
-    rod_distance: float,
-    charge: float,
-    mass: float,
-) -> tuple[float, float, float]:
-    """
-    Calculate the Mathieu equation parameters and resulting secular frequency.
-
-    The Mathieu parameters determine the stability of particle motion in a Paul trap:
-    - a: DC stability parameter (0 for pure AC operation)
-    - q: AC stability parameter (stable trapping typically requires |q| < 0.908)
-    - secular_freq: Resulting frequency of the particle's slow oscillation
-
-    For diamond-shaped orbits, q ≈ 0.3-0.4 gives good results.
-
-    Args:
-        voltage_amplitude: Peak RF voltage amplitude (V)
-        driving_frequency: RF driving frequency (Hz)
-        rod_distance: Distance from trap center to rods (m)
-        charge: Particle charge (C)
-        mass: Particle mass (kg)
-
-    Returns:
-        tuple of (a, q, secular_freq)
-    """
-    omega = 2 * np.pi * driving_frequency
-    q = 4 * charge * voltage_amplitude / (mass * omega**2 * rod_distance**2)
-    a = 0  # For pure AC operation
-
-    secular_freq = calculate_secular_frequency(q, driving_frequency)
-    return a, q, secular_freq
-
-
 def estimate_diamond_orbit_parameters(
     rod_distance: float,
     particle_charge: float,
@@ -71,7 +36,7 @@ def estimate_diamond_orbit_parameters(
         StableOrbitParameters containing voltage, position, velocity, and stability info
     """
     # Keep the same q for stability
-    target_q = 0.3  # Smaller q ensures stability within Mathieu's stability region
+    target_q = 0.4  # Smaller q ensures stability within Mathieu's stability region
     omega = 2 * np.pi * driving_freq
 
     # Calculate required voltage for stable operation
@@ -89,8 +54,9 @@ def estimate_diamond_orbit_parameters(
     initial_position = (r0 * np.cos(angle), r0 * np.sin(angle))
 
     # Adjust velocity to match secular frequency
-    v0 = 2 * np.pi * secular_freq * r0
-    initial_velocity = (-v0 * np.sin(angle), v0 * np.cos(angle))
+    # v0 = 2 * np.pi * secular_freq * r0
+    # initial_velocity = (-v0 * np.sin(angle), v0 * np.cos(angle))
+    initial_velocity = (0, 0)
 
     return StableOrbitParameters(
         voltage_amplitude=voltage,

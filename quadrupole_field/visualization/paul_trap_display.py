@@ -71,6 +71,7 @@ class PaulTrapVisualizer:
         self.ax.set_ylim(-limit, limit)
         self.ax.set_xlabel("x (m)")
         self.ax.set_ylabel("y (m)")
+        self.ax.set_title("Paul Trap Simulation (t = 0.00 s)")
 
     def setup_visualizers(self) -> None:
         """Setup the visualization components."""
@@ -98,6 +99,9 @@ class PaulTrapVisualizer:
 
         # Update rod colors
         self.rod_vis.update_colors(voltages)
+
+        # Update title with current time
+        self.ax.set_title(f"Paul Trap Simulation (t = {frame * self.dt:.2f} s)")
 
         return []
 
