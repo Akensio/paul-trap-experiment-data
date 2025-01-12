@@ -49,25 +49,29 @@ class Rod:
         Ey = E_magnitude * (dy / R)
         return Ex, Ey
 
-    def electric_potential_at(self, x: float, y: float, min_distance: float = 1e-9) -> float:
+    def electric_potential_at(
+        self, x: float, y: float, min_distance: float = 1e-9
+    ) -> float:
         """Calculate the electric potential at a point due to this rod.
-        
+
         For an infinite line charge, the potential follows:
             V(r) = -(λ/2πε₀) * ln(r/r₀)
         where:
             λ is the charge density (proportional to voltage here)
             r is the distance from the line
             r₀ is a reference distance
-        
+
         Args:
             x: X-coordinate of the point
             y: Y-coordinate of the point
             min_distance: Minimum distance threshold to prevent singularities
-            
+
         Returns:
             Electric potential value at the given point
         """
         dx = x - self.position[0]
         dy = y - self.position[1]
         R = np.sqrt(dx**2 + dy**2) + min_distance
-        return -self.voltage * np.log(R)  # Negative because higher voltage = lower potential
+        return -self.voltage * np.log(
+            R
+        )  # Negative because higher voltage = lower potential

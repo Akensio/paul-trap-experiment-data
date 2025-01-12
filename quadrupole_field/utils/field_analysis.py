@@ -13,17 +13,17 @@ def calculate_max_field_magnitude(
     a: float,
 ) -> float:
     """Calculate the maximum field magnitude across all time steps.
-    
+
     Args:
         trap: Trap instance for field calculations
         voltages_history: History of voltages for animation
         a: Trap size parameter
-        
+
     Returns:
         Maximum field magnitude encountered
     """
     max_magnitude = 0
-    
+
     # Create grid using the same parameters as FieldVisualizer
     x = np.linspace(
         -a * PLOT_CONFIG.field_extent_factor,
@@ -54,4 +54,4 @@ def calculate_max_field_magnitude(
                 if np.isfinite(magnitude):
                     max_magnitude = max(max_magnitude, magnitude)
 
-    return max_magnitude 
+    return max_magnitude

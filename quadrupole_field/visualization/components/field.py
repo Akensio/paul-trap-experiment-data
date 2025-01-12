@@ -68,9 +68,7 @@ class FieldVisualizer:
             for j in range(len(self.Y)):
                 colors[i, j] = sum(
                     rod.electric_potential_at(
-                        self.X[i, j], 
-                        self.Y[i, j], 
-                        PLOT_CONFIG.min_distance_threshold
+                        self.X[i, j], self.Y[i, j], PLOT_CONFIG.min_distance_threshold
                     )
                     for rod in self.trap.rods
                 )

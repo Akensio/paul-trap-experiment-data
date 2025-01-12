@@ -3,10 +3,10 @@
 from typing import Any, List
 
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation, FFMpegWriter
+import numpy as np
+from matplotlib.animation import FFMpegWriter, FuncAnimation
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
-import numpy as np
 from numpy.typing import NDArray
 
 from quadrupole_field.core.trap import Trap
@@ -80,9 +80,7 @@ class PaulTrapVisualizer:
         )
 
         # Initialize visualization components
-        self.field_vis = FieldVisualizer(
-            self.ax, self.trap, self.a, max_field
-        )
+        self.field_vis = FieldVisualizer(self.ax, self.trap, self.a, max_field)
         self.particle_vis = ParticleVisualizer(self.ax)
         self.rod_vis = RodVisualizer(self.ax, self.trap)
 
