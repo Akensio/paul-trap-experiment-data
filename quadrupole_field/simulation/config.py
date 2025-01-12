@@ -74,8 +74,25 @@ class OutputConfig(BaseModel):
     )
 
 
+class InitialConditionsConfig(BaseModel):
+    """Optional manual override for initial conditions.
+    
+    If not provided, these will be calculated automatically using the stability analysis.
+    """
+    voltage_amplitude: float | None = Field(
+        default=None,
+        description="Manual override for voltage amplitude (V)"
+    )
+    initial_position: tuple[float, float] | None = Field(
+        default=None,
+        description="Manual override for initial position (x,y) in meters"
+    )
+    initial_velocity: tuple[float, float] | None = Field(
+        default=None,
+        description="Manual override for initial velocity (vx,vy) in m/s"
+    )
+
+
 # Default configurations
-DEFAULT_SIMULATION_CONFIG = SimulationConfig()
 DEFAULT_TRAP_CONFIG = TrapConfig()
 DEFAULT_PARTICLE_CONFIG = ParticleConfig()
-DEFAULT_OUTPUT_CONFIG = OutputConfig()

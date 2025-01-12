@@ -76,7 +76,7 @@ Basic usage:
 python -m quadrupole_field.main
 ```
 
-With custom parameters:
+With custom trap and particle parameters:
 ```bash
 python -m quadrupole_field.main \
 --simulation.dt 0.0005 \
@@ -89,6 +89,14 @@ python -m quadrupole_field.main \
 --output.output_file "custom_simulation.mp4"
 ```
 
+With manual override of initial conditions:
+```bash
+python -m quadrupole_field.main \
+--initial.voltage_amplitude 1000 \
+--initial.initial_position 0.001,0 \
+--initial.initial_velocity 0,0.1
+```
+
 Available parameters:
 - Simulation settings:
   - `--dt`: Time step size in seconds (default: 0.001)
@@ -99,9 +107,15 @@ Available parameters:
 - Particle properties:
   - `--charge`: Particle charge in Coulombs (default: 1.0)
   - `--mass`: Particle mass in kilograms (default: 1.0)
+- Initial conditions (optional overrides):
+  - `--initial.voltage_amplitude`: Manual override for voltage amplitude in Volts
+  - `--initial.initial_position`: Manual override for initial position as "x,y" in meters
+  - `--initial.initial_velocity`: Manual override for initial velocity as "vx,vy" in m/s
 - Output options:
   - `--save_video`: Save animation to file (flag)
   - `--output_file`: Output video filename (default: "paul_trap_simulation.mp4")
+
+Note: Initial conditions are automatically calculated for stable orbits if not manually specified.
 
 To see all available options:
 ```bash

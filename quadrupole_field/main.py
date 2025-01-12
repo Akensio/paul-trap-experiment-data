@@ -12,14 +12,15 @@ from quadrupole_field.visualization.paul_trap_display import PaulTrapVisualizer
 def main() -> None:
     """Run the Paul trap simulation with command line arguments."""
     # Parse command line arguments
-    sim_config, trap_config, particle_config, output_config = parse_args()
+    sim_config, trap_config, particle_config, output_config, initial_config = parse_args()
 
-    # Get initial parameters
+    # Get initial parameters with optional overrides
     params = get_initial_parameters(
         rod_distance=trap_config.rod_distance,
         particle_charge=particle_config.charge,
         particle_mass=particle_config.mass,
         driving_freq=trap_config.driving_frequency,
+        initial_conditions=initial_config,
     )
 
     def voltages_over_time(t: float) -> List[float]:
