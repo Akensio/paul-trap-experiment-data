@@ -1,9 +1,9 @@
 """Initialize simulation parameters."""
 
 from quadrupole_field.simulation.config import (
-    InitialConditionsConfig,
     DEFAULT_PARTICLE_CONFIG,
     DEFAULT_TRAP_CONFIG,
+    InitialConditionsConfig,
 )
 from quadrupole_field.utils.stability import estimate_diamond_orbit_parameters
 from quadrupole_field.utils.stable_orbit_params import StableOrbitParameters
@@ -24,16 +24,19 @@ def get_initial_parameters(
         particle_mass=particle_mass,
         driving_freq=driving_freq,
     )
-    
+
     if initial_conditions is None:
         return calculated
-    
+
     # Use provided overrides, falling back to calculated values when needed
     return StableOrbitParameters(
-        voltage_amplitude=initial_conditions.voltage_amplitude or calculated.voltage_amplitude,
+        voltage_amplitude=initial_conditions.voltage_amplitude
+        or calculated.voltage_amplitude,
         driving_frequency=driving_freq,
-        initial_position=initial_conditions.initial_position or calculated.initial_position,
-        initial_velocity=initial_conditions.initial_velocity or calculated.initial_velocity,
+        initial_position=initial_conditions.initial_position
+        or calculated.initial_position,
+        initial_velocity=initial_conditions.initial_velocity
+        or calculated.initial_velocity,
         stability_q=calculated.stability_q,
         secular_frequency=calculated.secular_frequency,
     )

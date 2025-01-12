@@ -1,11 +1,12 @@
 """Main visualization coordinator for the Paul trap simulation."""
+
 from typing import Any, List
 
 import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib.animation import FuncAnimation
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
-import numpy as np
 from numpy.typing import NDArray
 
 from quadrupole_field.core.trap import Trap

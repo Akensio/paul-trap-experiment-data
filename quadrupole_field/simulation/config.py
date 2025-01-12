@@ -3,93 +3,73 @@ This module contains all configurable parameters for the simulation, organized i
 logical groups. Each parameter can be adjusted to explore different trap behaviors.
 """
 
-
 from pydantic import BaseModel, Field
 
 
 class SimulationConfig(BaseModel):
     """Time-related configuration for the simulation.
-    
+
     Controls the temporal resolution and duration of the simulation. Smaller dt values
     provide more accurate results but increase computation time.
     """
-    dt: float = Field(
-        default=0.001,
-        description="Time step size in seconds",
-        gt=0
-    )
+
+    dt: float = Field(default=0.001, description="Time step size in seconds", gt=0)
     total_time: float = Field(
-        default=5.0,
-        description="Total simulation duration in seconds",
-        gt=0
+        default=5.0, description="Total simulation duration in seconds", gt=0
     )
 
 
 class TrapConfig(BaseModel):
     """Physical configuration of the trap system.
-    
+
     Defines the fundamental trap parameters that determine its operation.
     The rod_distance and driving_frequency are key parameters that affect
     particle stability.
     """
+
     rod_distance: float = Field(
-        default=1.0,
-        description="Distance from center to rods in meters",
-        gt=0
+        default=1.0, description="Distance from center to rods in meters", gt=0
     )
     driving_frequency: float = Field(
-        default=5.0,
-        description="RF frequency in Hz",
-        gt=0
+        default=5.0, description="RF frequency in Hz", gt=0
     )
 
 
 class ParticleConfig(BaseModel):
     """Configuration of the simulated particle.
-    
+
     Defines the physical properties of the trapped particle. These values
     determine the particle's response to the electric field and its
     stability characteristics.
     """
-    charge: float = Field(
-        default=1.0,
-        description="Particle charge in Coulombs"
-    )
-    mass: float = Field(
-        default=1.0,
-        description="Particle mass in kilograms",
-        gt=0
-    )
+
+    charge: float = Field(default=1.0, description="Particle charge in Coulombs")
+    mass: float = Field(default=1.0, description="Particle mass in kilograms", gt=0)
 
 
 class OutputConfig(BaseModel):
     """Configuration for simulation output and visualization."""
-    save_video: bool = Field(
-        default=False,
-        description="Save animation as video file"
-    )
+
+    save_video: bool = Field(default=False, description="Save animation as video file")
     output_file: str = Field(
-        default="paul_trap_simulation.mp4",
-        description="Output video filename"
+        default="paul_trap_simulation.mp4", description="Output video filename"
     )
 
 
 class InitialConditionsConfig(BaseModel):
     """Optional manual override for initial conditions.
-    
+
     If not provided, these will be calculated automatically using the stability analysis.
     """
+
     voltage_amplitude: float | None = Field(
-        default=None,
-        description="Manual override for voltage amplitude (V)"
+        default=None, description="Manual override for voltage amplitude (V)"
     )
     initial_position: tuple[float, float] | None = Field(
-        default=None,
-        description="Manual override for initial position (x,y) in meters"
+        default=None, description="Manual override for initial position (x,y) in meters"
     )
     initial_velocity: tuple[float, float] | None = Field(
-        default=None,
-        description="Manual override for initial velocity (vx,vy) in m/s"
+        default=None, description="Manual override for initial velocity (vx,vy) in m/s"
     )
 
 

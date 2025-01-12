@@ -1,4 +1,5 @@
 """Main simulation runner."""
+
 from typing import List
 
 import numpy as np
@@ -12,7 +13,9 @@ from quadrupole_field.visualization.paul_trap_display import PaulTrapVisualizer
 def main() -> None:
     """Run the Paul trap simulation with command line arguments."""
     # Parse command line arguments
-    sim_config, trap_config, particle_config, output_config, initial_config = parse_args()
+    sim_config, trap_config, particle_config, output_config, initial_config = (
+        parse_args()
+    )
 
     # Get initial parameters with optional overrides
     params = get_initial_parameters(

@@ -1,11 +1,11 @@
+import sys
+
+import matplotlib.pyplot as plt
+import matplotlib.transforms as transforms
 import numpy as np
 import pandas as pd
-from scipy import odr
-from scipy import stats
-import matplotlib.pyplot as plt
 from matplotlib.patches import Ellipse
-import matplotlib.transforms as transforms
-import sys
+from scipy import odr, stats
 
 
 def linear_func(p, x):
@@ -37,9 +37,7 @@ def confidence_ellipse(mean, cov, ax, n_std=1.0, **kwargs):
     ell_radius_x = np.sqrt(1 + pearson)
     ell_radius_y = np.sqrt(1 - pearson)
 
-    ellipse = Ellipse(
-        (0, 0), width=ell_radius_x * 2, height=ell_radius_y * 2, **kwargs
-    )
+    ellipse = Ellipse((0, 0), width=ell_radius_x * 2, height=ell_radius_y * 2, **kwargs)
 
     scale_x = np.sqrt(cov[0, 0]) * n_std
     scale_y = np.sqrt(cov[1, 1]) * n_std
@@ -60,19 +58,14 @@ def format_matrix(matrix):
     matrix = np.asarray(matrix)
 
     # Format each element with scientific notation
-    formatted_elements = [
-        [f"{element:1.6e}" for element in row] for row in matrix
-    ]
+    formatted_elements = [[f"{element:1.6e}" for element in row] for row in matrix]
 
     # Get maximum width for alignment
-    width = max(
-        len(str(element)) for row in formatted_elements for element in row
-    )
+    width = max(len(str(element)) for row in formatted_elements for element in row)
 
     # Create formatted rows
     formatted_rows = [
-        " ".join(f"{element:>{width}}" for element in row)
-        for row in formatted_elements
+        " ".join(f"{element:>{width}}" for element in row) for row in formatted_elements
     ]
 
     # Return the full string with newlines
@@ -170,9 +163,7 @@ def plot_ellipses(results, save_path):
             label=label,
         )
 
-    ax.plot(
-        results.beta[0], results.beta[1], "r*", label="Best fit", markersize=10
-    )
+    ax.plot(results.beta[0], results.beta[1], "r*", label="Best fit", markersize=10)
 
     plt.xlabel("Slope (m)")
     plt.ylabel("Intercept (b)")
@@ -188,9 +179,7 @@ def plot_ellipses(results, save_path):
         f.write("Regression Results:\n")
         f.write("-----------------\n")
         f.write(f"Slope: {results.beta[0]:.6f} ± {results.sd_beta[0]:.6f}\n")
-        f.write(
-            f"Intercept: {results.beta[1]:.6f} ± {results.sd_beta[1]:.6f}\n"
-        )
+        f.write(f"Intercept: {results.beta[1]:.6f} ± {results.sd_beta[1]:.6f}\n")
         f.write(f"\nCovariance matrix:")
         f.write(f"\n{format_matrix(results.cov_beta)}")
         f.write(
@@ -226,8 +215,8 @@ def main():
         return
 
     x, dx, y, dy = data
-    results, chi_square, deegres_freedom, chi_square_reduced, p_value = (
-        perform_odr(x, dx, y, dy)
+    results, chi_square, deegres_freedom, chi_square_reduced, p_value = perform_odr(
+        x, dx, y, dy
     )
 
 
