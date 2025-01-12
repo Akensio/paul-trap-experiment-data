@@ -2,8 +2,12 @@
 from typing import List
 import numpy as np
 
-from quadrupole_field.simulation.config import SIMULATION_CONFIG
-from quadrupole_field.simulation.constants import (
+from quadrupole_field.simulation.config import (
+    SIMULATION_CONFIG,
+    TRAP_CONFIG,
+    PARTICLE_CONFIG,
+)
+from quadrupole_field.simulation.parameters import (
     DRIVING_FREQUENCY,
     PARTICLE_CHARGE,
     PARTICLE_MASS,
@@ -32,9 +36,9 @@ if __name__ == "__main__":
     print(f"Initial velocity: {params.initial_velocity}")
 
     simulation = Simulation(
-        a=ROD_DISTANCE,
-        charge=PARTICLE_CHARGE,
-        mass=PARTICLE_MASS,
+        a=TRAP_CONFIG.rod_distance,
+        charge=PARTICLE_CONFIG.charge,
+        mass=PARTICLE_CONFIG.mass,
         initial_position=params.initial_position,
         initial_velocity=params.initial_velocity,
         dt=SIMULATION_CONFIG.dt,
@@ -48,7 +52,7 @@ if __name__ == "__main__":
         positions=positions,
         velocities=velocities,
         voltages_history=voltages_history,
-        a=ROD_DISTANCE,
+        a=TRAP_CONFIG.rod_distance,
         trap=simulation.trap,
         dt=SIMULATION_CONFIG.dt,
     )
