@@ -1,3 +1,9 @@
+"""Rod component for the Paul trap.
+
+This module defines the Rod class, which represents a single electrode in the Paul trap.
+Each rod contributes to the total electric field and can have its voltage varied over time.
+"""
+
 from typing import Tuple
 
 import numpy as np
@@ -5,6 +11,12 @@ from numpy.typing import NDArray
 
 
 class Rod:
+    """A single electrode rod in the Paul trap.
+    
+    The rod is modeled as a point charge for field calculations, with its
+    contribution to the electric field falling off as 1/r from its position.
+    """
+
     def __init__(self, position: Tuple[float, float]) -> None:
         """
         Initialize a rod.

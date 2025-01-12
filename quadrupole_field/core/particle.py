@@ -1,4 +1,8 @@
-"""Particle physics component."""
+"""Particle dynamics in electromagnetic fields.
+
+This module implements the particle motion under the influence of electric fields
+in the Paul trap, using the Lorentz force law and Newton's equations of motion.
+"""
 
 from typing import Tuple
 
@@ -9,6 +13,16 @@ from quadrupole_field.core.physical_constants import ELEMENTARY_CHARGE
 
 
 class Particle:
+    """A charged particle in electromagnetic fields.
+    
+    The particle's motion is determined by:
+    - Charge and mass (defining its response to fields)
+    - Position and velocity (defining its state)
+    - Electric fields (providing the forces)
+    
+    Motion is integrated using a 4th-order symplectic algorithm for accuracy.
+    """
+
     def __init__(
         self,
         charge: float,
