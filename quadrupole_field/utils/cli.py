@@ -19,10 +19,10 @@ def parse_args() -> tuple[
     parser = argparse.ArgumentParser(description="Paul Trap Simulation")
     
     # Add arguments from each Pydantic model with prefixes
-    add_args_from_model(parser, SimulationConfig, create_group=True)
-    add_args_from_model(parser, TrapConfig, create_group=True)
-    add_args_from_model(parser, ParticleConfig, create_group=True)
-    add_args_from_model(parser, OutputConfig, create_group=True)
+    add_args_from_model(parser, SimulationConfig, create_group=True, help_def_type=True)
+    add_args_from_model(parser, TrapConfig, create_group=True, help_def_type=True)
+    add_args_from_model(parser, ParticleConfig, create_group=True, help_def_type=True)
+    add_args_from_model(parser, OutputConfig, create_group=True, help_def_type=True)
     add_args_from_model(parser, InitialConditionsConfig, create_group=True)
     
     args = parser.parse_args()
