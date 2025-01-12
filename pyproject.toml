@@ -3,7 +3,7 @@ package-mode = false
 name = "paul-trap-experiment-data"
 version = "0.1.0"
 description = ""
-authors = ["Gadi B <gadibessudo@gmail.com>"]
+authors = ["Eitan S <eesadeh@gmail.com>", "Gadi B <gadibessudo@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
