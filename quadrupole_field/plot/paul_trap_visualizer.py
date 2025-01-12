@@ -41,7 +41,7 @@ class PaulTrapVisualizer:
         self.ax.set_ylabel('y (m)')
         
         # Initialize visualizer components
-        self.field_vis = FieldVisualizer(self.ax, trap, a)
+        self.field_vis = FieldVisualizer(self.ax, trap, a, voltages_history)
         self.particle_vis = ParticleVisualizer(self.ax)
         self.rod_vis = RodVisualizer(self.ax, trap)
 
