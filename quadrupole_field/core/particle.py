@@ -2,11 +2,7 @@
 from typing import Tuple
 import numpy as np
 from numpy.typing import NDArray
-from quadrupole_field.core.physical_constants import (
-    ELEMENTARY_CHARGE,
-    ELECTRON_MASS,
-    PROTON_MASS,
-)
+from quadrupole_field.core.physical_constants import ELEMENTARY_CHARGE
 
 class Particle:
     def __init__(
