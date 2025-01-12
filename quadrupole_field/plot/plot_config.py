@@ -1,12 +1,16 @@
 """Plot configuration settings."""
+
 from dataclasses import dataclass, field
+
 from matplotlib.colors import LinearSegmentedColormap
+
 
 def create_electric_colormap() -> LinearSegmentedColormap:
     return LinearSegmentedColormap.from_list(
         "electric_potential",
         ["#2166AC", "white", "#B2182B"],
     )
+
 
 @dataclass
 class PlotConfig:
@@ -23,16 +27,16 @@ class PlotConfig:
     velocity_arrow_width: float = 0.005
     velocity_arrow_size: float = 0.2
 
+
 @dataclass
 class ColorConfig:
-    colormap: LinearSegmentedColormap = field(
-        default_factory=create_electric_colormap
-    )
+    colormap: LinearSegmentedColormap = field(default_factory=create_electric_colormap)
     voltage_range: tuple[float, float] = (-10, 10)
     particle_color: str = "#1f77b4"
     trajectory_color: str = "#1f77b4"
     velocity_arrow_color: str = "#d62728"
     grid_color: str = "gray"
+
 
 # Create instances
 PLOT_CONFIG = PlotConfig()

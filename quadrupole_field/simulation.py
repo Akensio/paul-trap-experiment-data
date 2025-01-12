@@ -1,8 +1,9 @@
 from typing import Callable, List, Tuple
 
 import numpy as np
-from quadrupole_field.config import SIMULATION_CONFIG
 from numpy.typing import NDArray
+
+from quadrupole_field.config import SIMULATION_CONFIG
 from quadrupole_field.particle import Particle
 from quadrupole_field.trap import Trap
 
@@ -39,7 +40,7 @@ class Simulation:
         velocities: List[NDArray[np.float64]] = []
         voltages_history: List[List[float]] = []
         time_steps: int = int(total_time / self.dt)
-        
+
         for t in range(time_steps):
             t_actual = t * self.dt
             voltages = voltages_over_time(t_actual)

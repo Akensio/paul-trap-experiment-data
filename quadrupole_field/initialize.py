@@ -6,8 +6,9 @@ from quadrupole_field.constants import (
     PARTICLE_MASS,
     ROD_DISTANCE,
 )
-from quadrupole_field.stability import suggest_diamond_orbit_parameters
 from quadrupole_field.orbit_parameters import OrbitParameters
+from quadrupole_field.stability import suggest_diamond_orbit_parameters
+
 
 def get_initial_parameters() -> OrbitParameters:
     """Get the initial parameters for the simulation."""

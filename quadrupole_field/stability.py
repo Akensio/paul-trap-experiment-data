@@ -3,6 +3,7 @@
 from typing import Tuple
 
 import numpy as np
+
 from quadrupole_field.orbit_parameters import OrbitParameters
 
 
